@@ -1,0 +1,64 @@
+
+html {
+    scroll-behavior: smooth;
+}
+
+.container {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+  }
+  
+  .left {
+    width: 20%;
+    position: fixed;
+    margin-right: 10%;
+  }
+  
+  .right {
+    padding: 3%;
+    width: 80%;
+    margin-left: 15%;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  li {
+    margin-bottom: 10px;
+  }
+  
+  a {
+    text-decoration: none;
+    color: blue;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+
+  a[href^="#"] {
+    transition-duration: 10000s; /* Change this to adjust the animation speed */
+  }
+  
+  #section1,
+  #section2,
+  #section3,
+  #section4,
+  #section5,
+  #section6,
+  #section7,
+  #section8,
+  #section9,
+  #section10,
+  #section11,
+  #section12 {
+    height: 500px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  

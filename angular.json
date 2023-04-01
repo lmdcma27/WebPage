@@ -12,7 +12,7 @@
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
-          "options": {
+          "options": {            
             "outputPath": "dist/fronted2",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -27,7 +27,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/prism.js",
+              "src/assets/main.js"
+            ]
           },
           "configurations": {
             "production": {

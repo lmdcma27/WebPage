@@ -1,16 +1,35 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HeaderComponent } from './components/header/header.component';
+import { MainComponent } from './components/main/main.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { TestComponent } from './components/test/test.component';
+import { GlobalPageComponent } from './components/global-page/global-page.component';
+
+//importamos los paquetes para usar python
+import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs/public-api';
+import { KatexModule } from 'ng-katex';
+import { Test2Component } from './components/test2/test2.component';
+import { PciComponent } from './components/pci/pci.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HeaderComponent,
+    MainComponent,
+    FooterComponent,
+    TestComponent,
+    GlobalPageComponent,
+    Test2Component,
+    PciComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule, 
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,80 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="left">
+            <ul>
+                <li *ngFor="let elemento of listado">
+                    <a (click)="onClick(elemento[0])"> {{elemento[1]| uppercase}}</a>
+                </li>
+            </ul>
+
+            <h2>{{seccionElegida | uppercase}} Details</h2>
+            <div><span>id: </span>{{seccionElegida}}</div>
+
+        </div>
+        <div class="right">
+            <div id="section1">
+                <h2>Section 1</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac augue ut augue rhoncus interdum. Nam
+                    non nulla eu augue efficitur rhoncus id ac quam. Nulla facilisi. Nulla id consequat justo. Sed
+                    gravida vel turpis quis sollicitudin. Sed quis rhoncus ex. Donec vel orci urna.</p>
+                <pre><code class="python">{{ myPythonCode }}</code></pre>
+            </div>
+            <div id="section2">
+                <h2>Section 2</h2>
+                <p>Phasellus consequat justo eu magna pharetra lacinia. Praesent eget sapien ut metus lobortis egestas.
+                    Sed malesuada velit augue, in vehicula ipsum dictum ut. Nulla facilisi. Praesent et interdum orci.
+                    Etiam bibendum dolor vitae faucibus vulputate. Pellentesque habitant morbi tristique senectus et
+                    netus et malesuada fames ac turpis egestas. Morbi euismod gravida leo, ut bibendum elit.</p>
+            </div>
+            <div id="section3">
+                <h2>Section 3</h2>
+                <p>Donec porttitor diam a diam hendrerit cursus. Nam mattis lectus vel bibendum pretium. Ut vitae leo
+                    non libero aliquam volutpat. Sed ut massa nisi. Sed euismod ut nulla id congue. Nunc ut urna vel
+                    odio vestibulum fermentum. Nullam ut ullamcorper odio. Pellentesque vel nibh ut velit feugiat
+                    facilisis in ut est.</p>
+            </div>
+            <div id="section4">
+                <h2>Section 4</h2>
+                <p>Nunc non libero nulla. Morbi pellentesque, augue vitae feugiat bibendum, tortor elit gravida nulla,
+                    vel cursus velit magna sit amet orci. Suspendisse eu orci mauris. Sed sit amet euismod augue. Fusce
+                    semper nisi ac mauris laoreet porttitor. Pellentesque pretium semper dignissim. Etiam in augue ut
+                    nisl varius lacinia vitae ac velit.</p>
+            </div>
+            <div id="section5">
+                <h2>Section 5</h2>
+                <p>Vestibulum at mauris consequat, aliquet orci eget, laoreet nulla. Sed vel libero lobortis, dictum
+                    nulla vitae, sagittis velit. Fusce
+
+            </div>
+            <div id="section6">
+                <h2>Section 5</h2>
+                <p>Vestibulum at mauris consequat, aliquet orci eget, laoreet nulla. Sed vel libero lobortis, dictum
+                    nulla vitae, sagittis velit. Fusce
+
+            </div>
+            <div id="section7">
+                <h2>Section 7</h2>
+                <p>Vestibulum at mauris consequat, aliquet orci eget, laoreet nulla. Sed vel libero lobortis, dictum
+                    nulla vitae, sagittis velit. Fusce
+
+            </div>
+            <div id="section8">
+                <h2>Section 8</h2>
+                <p>Vestibulum at mauris consequat, aliquet orci eget, laoreet nulla. Sed vel libero lobortis, dictum
+                    nulla vitae, sagittis velit. Fusce
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

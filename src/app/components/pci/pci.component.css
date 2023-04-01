@@ -1,0 +1,115 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.global {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  
+}
+
+.tableOfContents {
+  width: 19%;
+  position: fixed;
+  margin-right: 10%;
+  margin-top: 10%;
+  margin-bottom: 10%;
+  background-color: cyan;
+
+}
+
+.tableOfContents a:hover{
+  background-color: orange;
+  color: black;
+  background: transparent;
+}
+
+.content {
+  padding: 3%;
+  width: 75%;
+  margin-left: 20%;
+  border-style: groove;
+  border-color: grey;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: rgb(192, 188, 188);
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin: 20px;
+}
+
+a {
+  text-decoration: none;
+  color: gray;
+}
+
+a:hover {
+  text-decoration:solid;
+}
+
+a[href^="#"] {
+  transition-duration: 10000s; /* Change this to adjust the animation speed */
+}
+
+#section1,
+#section2,
+#section3,
+#section4,
+#section5,
+#section6,
+#section7,
+#section8{
+  height: 500px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+
+
+.container {
+  width: 50%;
+  height: 66%;
+  overflow: auto;
+  border-radius: 12px;
+}
+
+.code-wrapper {
+  position: relative;
+}
+
+#copy-button{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 7px;
+  background-color: #2d2d2d;
+  outline: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+  opacity: 0;
+  border: 1px solid antiquewhite;
+}
+
+#copy-button.show-msg{
+  display: none;
+
+}
+#copy-button:hover{
+  background-color: #423e3e;
+}
+
+.code-wrapper:hover #copy-button{
+  opacity: 1;
+}
+
