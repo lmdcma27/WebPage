@@ -1,15 +1,16 @@
 document.addEventListener('DOMContentLoaded',()=> {
-    const codeBlock = document.getElementById('code');
-    const copyButton = document.getElementById('copy-button');
     const copySuccess = document.getElementById('copy-success');
-
-    const copyTextHandler = () => {
-        const text  = codeBlock.innerText;
+    const copyButtons = document.querySelectorAll("[id='copy-button']");
+    const codeBlocks = document.querySelectorAll("[id='code']");
+    console.log(copyButtons);
+    const copyTextHandler = (text,idx) => {
+        //const text  = codeBlock.innerText;
         navigator.clipboard.writeText(text).then(
             ()=>{
-                copyButton.innerHTML = "Copied!";
+                
+                copyButtons[idx].innerHTML = "Copied!";
                 setTimeout(() => {
-                    copyButton.innerHTML = "Copy";
+                    copyButtons[idx].innerHTML = "Copy";
                 },1000);
             },
         () => {  
@@ -17,6 +18,14 @@ document.addEventListener('DOMContentLoaded',()=> {
         }
         );
     };
-    copyButton.addEventListener('click',copyTextHandler);
-
+    //copyButton.addEventListener('click',copyTextHandler);
+    for (let i = 0; i < copyButtons.length; i++) {
+        const copyButton = copyButtons[i];
+        const codeBlock = codeBlocks[i];
+        copyButton.addEventListener('click', () => {
+            const text = codeBlock.innerText;
+            copyTextHandler(text,i);
+        });
+    }
+    
 });

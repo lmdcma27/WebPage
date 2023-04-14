@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PciComponent } from './pci.component';
+import { CpiComponent } from './cpi.component';
 
 describe('PciComponent', () => {
-  let component: PciComponent;
-  let fixture: ComponentFixture<PciComponent>;
+  let component: CpiComponent;
+  let fixture: ComponentFixture<CpiComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PciComponent ]
+      declarations: [ CpiComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PciComponent);
+    fixture = TestBed.createComponent(CpiComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

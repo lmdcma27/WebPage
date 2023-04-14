@@ -4,10 +4,10 @@ import { TableOfContents } from './tableOfContents';
 
 @Component({
   selector: 'app-pci',
-  templateUrl: './pci.component.html',
-  styleUrls: ['./pci.component.css','./prism.css']
+  templateUrl: './cpi.component.html',
+  styleUrls: ['./cpi.component.css','./prism.css']
 })
-export class PciComponent implements OnInit {
+export class CpiComponent implements OnInit {
   tableOfContents = TableOfContents;
   myPythonCode:string = 'import pandas as pd';
   mathequations = ['H = \\ sum_ {i = 1} ^ {m} p_ {i} log_ {2} (p_ {i})']

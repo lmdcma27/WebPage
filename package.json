@@ -19,7 +19,6 @@
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
     "highlight.js": "^11.7.0",
-    "katex": "^0.16.4",
     "ng-katex": "^1.0.3",
     "ngx-highlightjs": "^8.0.0",
     "require": "^2.4.20",

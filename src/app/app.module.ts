@@ -14,7 +14,7 @@ import { GlobalPageComponent } from './components/global-page/global-page.compon
 import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs/public-api';
 import { KatexModule } from 'ng-katex';
 import { Test2Component } from './components/test2/test2.component';
-import { PciComponent } from './components/pci/pci.component';
+import { CpiComponent } from './components/cpi/cpi.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +25,7 @@ import { PciComponent } from './components/pci/pci.component';
     TestComponent,
     GlobalPageComponent,
     Test2Component,
-    PciComponent,
+    CpiComponent,
   ],
   imports: [
     BrowserModule,
