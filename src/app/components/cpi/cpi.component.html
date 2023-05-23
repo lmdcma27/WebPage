@@ -9,6 +9,7 @@
 </head>
 
 <body>
+    
     <app-header></app-header>
     <div class="global">
         
@@ -23,13 +24,13 @@
 
             <div id="section1">
                     <h2>Introduction</h2>
-                    <p> The Consumer Price Index (CPI) is  is a price index, the price of a weighted average market basket 
+                    <p> The Consumer Price Index (CPI) is a price index, the price of a weighted average market basket 
                         of consumer goods and services purchased by households. Changes in measured CPI track changes in prices 
                         over time <a href="https://en.wikipedia.org/wiki/Consumer_price_index">See more</a>. Now we goint to see how to calculate
                         this index.
                     </p>
 
-                    <p> We use the Consumer price index manual. So, before to start with formulas and code we need some concepts about the Consumer_price_index:</p>
+                    <p> We use the Consumer price index manual. So, before to start with formulas and code we need some concepts about the Consumer Price I ndex:</p>
                     <ol>
                         <li>
                             All products needed to calculate the CPI are called <b>articles</b>, the articles are grouped into
@@ -111,7 +112,11 @@
 
             <div id="section3">
                 <h2>Essential Functions</h2>
+                <p> In this section it is presented basic functions (queries to get periodicity, weights and codes) needed to pass from one cathegory to other, especially to pass from 
+                articles cathegory to next cathegory.</p>
 
+
+                <p>With this method is posible get codes of elements from one cathegory specifying it with 'cod'</p>
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -129,6 +134,8 @@
                     </div>
                 </div>
 
+                <p>Just articles cathegory has periodicity attribute, this periodicity is different in each region, so is important especify the number region.  </p>
+
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -145,6 +152,8 @@
                         </button>
                     </div>
                 </div>
+
+                <p>In the same way that query the codes is posible query the cathegory weights.</p>
 
                 <div class="container">
                     <div class="code-wrapper">
@@ -169,7 +178,8 @@
                         </button>
                     </div>
                 </div>
-
+                In the final part, after to calculate the CPI per region, it is necessary make a weighted average to get the general CPI.
+                So, the next method query the region weights.
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -193,6 +203,7 @@
                         </button>
                     </div>
                 </div>
+                <p>This function join and align the cathegory indices of all regions using the its dataframe index (codes).</p>
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -211,8 +222,16 @@
 
             <div id="section4">
                 <h2>Variations</h2>
-                <p></p>                
-                <p>{{'$V_{i,v,t} =\\frac{P_t Q_{t-1}}{P_{t-1} Q_t}$'}}</p>
+                <p>The variation of an article for {{'$a$'}} in the current period {{'$t$'}}, current month, for the source {{'$s$'}} is:</p>                
+                <p style="text-align:center">{{'$V_{s,a,t} =\\frac{P_t Q_{t-1}}{P_{t-1} Q_t}$'}}</p>
+                <ol>
+                    <li>
+                        Variations with <b>change reference</b> {{"ArtCR $=$ 'SI'"}} must be replaced by {{"$1,0$"}}
+                    </li>                        
+                    <li>
+                        Variations whose value is undefined must be replaced by {{"$1,0$"}}
+                    </li>                        
+                </ol>
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -240,7 +259,13 @@
                 <h2>
                     F. Variations
                 </h2>
-                <p>{{'$V_v = \\prod_{i=1}^n V_{i,v,t}$  raised to the  $\\frac{1}{nm}$ power.'}}</p>
+                <p>The index of one article is called flexible variation. The flexible variation of one article is:</p>
+                <p style="text-align: center;">{{'$V_a = \\prod_{s=1}^n V_{s,a,t}$  raised to the  $\\frac{1}{nm}$ power.'}}</p>                
+                <p>
+                    where {{'$m$'}} is periodicity 
+                    of the article, {{'$n$'}} the number of sources and {{'$V_{s,a,t}$'}} is the variation of the article {{'$a$'}} for the
+                    source {{'$s$'}} in the current month {{'$i$'}}.
+                </p>
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -269,6 +294,19 @@
 
             <div id="section6">
                 <h2>Cathegory Indices</h2>
+                <p>The indices of the next cathegory can be calculate using:</p>
+                <p style="text-align: center;">
+                    {{'$ R_{GB} = \\vec{\\alpha} \\cdot \\vec{V} $'}}
+                </p>
+                <p>
+                    where {{'$\\vec{\\alpha}$'}} is the weight vector, {{'$\\vec{V}$'}} is the vector of indices and {{'$ R_{GB}$'}} 
+                    the relative index. To get the true index is necessary multiply by {{'$I_{GB}(t-1)$'}}, the corresponding index of the
+                    previous month:
+                </p>
+                <p style="text-align: center;">
+                    {{'$I_{GB}(t)= R_{GB} \\times I_{GB}(t-1)$'}}    
+                </p>
+                <p>So, in this instance, the below method calculate the relative.</p>
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -288,6 +326,7 @@
                     </div>
                 </div>
 
+                <p>And this method query the index in the month {{'$t-1$'}}</p>
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -318,6 +357,7 @@
 
             <div id="section7">
                 <h2>Consumer Price Index</h2>
+                <p>Now there is an object with the capacity to calculate the CPI. The last method is the builder that use all previous methods. </p>
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>

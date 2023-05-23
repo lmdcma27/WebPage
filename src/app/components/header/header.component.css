@@ -1,5 +1,5 @@
 .header {
-    background-color: #0c0c0c;
+    background-color: black;
     text-align: left;
     color: rgb(238, 232, 232);
     position: auto;
@@ -25,9 +25,14 @@
     text-decoration: none;
 }
 
+
 .navbar a:hover {
-    background-color: #ddd;
-    color: black;
+    background-color: white;
+    border-style: solid;
+    border-radius: 20px;
+    border-color: blue;
+    color: orange;
+    font-size: 18px;
 }
 
 .navegation {

@@ -30,7 +30,7 @@ html {
 }
 
 .content {
-  padding: 3%;
+  padding: 2.1%;
   width: 75%;
   margin-left: 20%;
   border-style: groove;
@@ -38,6 +38,7 @@ html {
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   background-color: rgb(192, 188, 188);
+  overflow: y;
 }
 
 ul {
