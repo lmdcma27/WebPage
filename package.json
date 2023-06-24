@@ -6,24 +6,30 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "heroku-postbuild": "ng build --prod"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^15.2.0",
+    "@angular/cli": "~15.2.4",
     "@angular/common": "^15.2.0",
     "@angular/compiler": "^15.2.0",
+    "@angular/compiler-cli": "^15.2.0",
     "@angular/core": "^15.2.0",
     "@angular/forms": "^15.2.0",
     "@angular/platform-browser": "^15.2.0",
     "@angular/platform-browser-dynamic": "^15.2.0",
     "@angular/router": "^15.2.0",
+    "express": "^4.18.2",
     "highlight.js": "^11.7.0",
     "ng-katex": "^1.0.3",
     "ngx-highlightjs": "^8.0.0",
+    "path": "^0.12.7",
     "require": "^2.4.20",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "typescript": "~4.9.4",
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
@@ -39,5 +45,9 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "typescript": "~4.9.4"
+  },
+  "engines": {
+    "node": "18.13.0",
+    "npm": "9.6.2"
   }
 }
