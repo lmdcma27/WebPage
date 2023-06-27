@@ -8,7 +8,7 @@ const app = express();
 
 app.use(express.static('./dist/fronted2'));
 
-app.get('/*',(req,res)=>res.sendFile('index.html',{root:'dist/angular-heroku/'}),
+app.get('/*',(req,res)=>res.sendFile('index.html',{root:'dist/fronted2/src/'}),
 );
 
 //Start the app by listening on the default Heroku port 
