@@ -4,7 +4,7 @@
     color: rgb(238, 232, 232);
     position: auto;
     width: 100%;
-    height: 55px;
+    height: 65px;
 }
 .logo {
     float: left;
@@ -54,6 +54,6 @@
 }
 
 li {
-    margin: -10px px;
+    margin: 5px;
     /* add some spacing between list items */
 }
