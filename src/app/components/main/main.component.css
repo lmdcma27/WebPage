@@ -5,12 +5,9 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: stretch;
-    /* add any other styles as needed */
+    align-items: stretch;    
 }
-
 /*--------------------------Projects Content------------------------*/
-
 .title{
     display: flex;
     flex-direction: row;
@@ -82,10 +79,7 @@
     background-color: white;
     border-color: blue;
 }
-
-
 /*--------------------------CV CONTENT------------------------*/
-
 .sidebar {
     float: right;
     width: 45%;    
@@ -97,7 +91,6 @@
     overflow: auto;
     display: flex;
 }
-
 .part1 {
     width: 100%;
     height: 7%;
