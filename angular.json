@@ -21,15 +21,15 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/favicon.ico",
-              "src/assets"
+              "docs/favicon.ico",
+              "docs/assets"
             ],
             "styles": [
               "src/styles.css"
             ],
             "scripts": [
-              "src/assets/prism.js",
-              "src/assets/main.js"
+              "docs/assets/prism.js",
+              "docs/assets/main.js"
             ]
           },
           "configurations": {
