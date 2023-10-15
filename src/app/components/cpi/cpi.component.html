@@ -18,8 +18,11 @@
                 <li *ngFor="let section of tableOfContents">
                     <a (click)="onClick(section[0])"> {{section[1]| uppercase}}</a>
                 </li>
-            </ul>
+            </ul>       
+            
+            <app-reload></app-reload>
         </div>
+        
         <div class="content">
 
             <div id="section1">
@@ -65,18 +68,18 @@
                         <pre>
                             <code code id="code" class="language-python">   
                                 def __init__(self,server : str,user : str,pas : str) -> None:
-                                self.codes = &#123;'Art': [],'Gba': [],'Sub': [],'Gru': [],'Agr': [],'Div': []&#125;
-                                self.lencodes = &#123;'Art': 9,'Gba': 7,'Sub': 5,'Gru': 4,'Agr': 3,'Div': 2&#125;
-                                self.periods : pd.DataFrame
-                                self.catwei = &#123;'Art': [],'Gba': [],'Sub': [],'Gru': [],'Agr': [],'Div': []&#125;
-                                self.regwei : pd.DataFrame
-                                self.di = &#123;'Art':6,'Gba':5,'Sub':4,'Gru':3,'Agr':2,'Div':1&#125;
-                                self.variations : pd.DataFrame 
-                                self.indcat : pd.DataFrame
-                                self.indant : pd.DataFrame
-                                self.server = server
-                                self.user = user 
-                                self.pas = pas
+                                    self.codes = &#123;'Art': [],'Gba': [],'Sub': [],'Gru': [],'Agr': [],'Div': []&#125;
+                                    self.lencodes = &#123;'Art': 9,'Gba': 7,'Sub': 5,'Gru': 4,'Agr': 3,'Div': 2&#125;
+                                    self.periods : pd.DataFrame
+                                    self.catwei = &#123;'Art': [],'Gba': [],'Sub': [],'Gru': [],'Agr': [],'Div': []&#125;
+                                    self.regwei : pd.DataFrame
+                                    self.di = &#123;'Art':6,'Gba':5,'Sub':4,'Gru':3,'Agr':2,'Div':1&#125;
+                                    self.variations : pd.DataFrame 
+                                    self.indcat : pd.DataFrame
+                                    self.indant : pd.DataFrame
+                                    self.server = server
+                                    self.user = user 
+                                    self.pas = pas
                             </code>
                         </pre>
                         <button id="copy-button" >
@@ -293,7 +296,7 @@
             </div>
 
             <div id="section6">
-                <h2>Cathegory Indices</h2>
+                <h2>Category Indices</h2>
                 <p>The indices of the next category can be calculate using:</p>
                 <p style="text-align: center;">
                     {{'$ R_{GB} = \\vec{\\alpha} \\cdot \\vec{V} $'}}

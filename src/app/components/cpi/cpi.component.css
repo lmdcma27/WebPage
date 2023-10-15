@@ -7,7 +7,7 @@ html {
   position: relative;
   width: 100%;
   height: 80%;
-  
+  background-color: black;
 }
 
 .tableOfContents {
@@ -15,18 +15,20 @@ html {
   flex-direction: column;
   width: 19%;
   position: fixed;
-  background-color: cyan;
+  
+  color: white;
   margin-top: 5%;
   margin-bottom: 5%;
   align-items: center;
 
 }
 
-
-.tableOfContents a:hover{
-  background-color: orange;
+.tableOfContents li:hover{
   color: black;
-  background: transparent;
+  background-color: white;  
+  font-size: 22px;
+  border-radius: 11px;
+  text-align: left;
 }
 
 .content {
@@ -37,7 +39,7 @@ html {
   border-color: grey;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
-  background-color: rgb(192, 188, 188);
+  background-color: white;
   overflow: y;
 }
 
@@ -48,7 +50,7 @@ ul {
 }
 
 li {
-  margin: 20px;
+  margin-top: 40px;
 }
 
 a {

@@ -15,6 +15,7 @@ import { HighlightModule, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs/public-api';
 import { KatexModule } from 'ng-katex';
 import { Test2Component } from './components/test2/test2.component';
 import { CpiComponent } from './components/cpi/cpi.component';
+import { ReloadComponent } from './components/reload/reload.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { CpiComponent } from './components/cpi/cpi.component';
     GlobalPageComponent,
     Test2Component,
     CpiComponent,
+    ReloadComponent,
   ],
   imports: [
     BrowserModule,

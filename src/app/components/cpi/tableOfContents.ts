@@ -5,6 +5,6 @@ export const TableOfContents: Array<string>[]= [
   ['section3','Essential Functions'],
   ['section4','Variations'],
   ['section5','F. Variations'],
-  ['section6','Cathegory indices'],
+  ['section6','Category indices'],
   ['section7','Consumer Price Index'],
 ];
