@@ -1,0 +1,11 @@
+.footer {
+    height: 10%;
+    background-color: black;
+    text-align: center;
+    color: rgb(238, 232, 232);
+    margin-top: 3px;
+}
+
+.nombre{
+    padding: 10px;
+}

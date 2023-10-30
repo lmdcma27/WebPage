@@ -1,0 +1,427 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Document</title>
+</head>
+
+<body>
+    
+    <app-header></app-header>
+    
+    <div class="global">
+        <div class="tableOfContents">
+            <app-reload></app-reload>
+            <ul>
+                <li *ngFor="let section of tableOfContents">
+                    <a (click)="onClick(section[0])"> {{section[1]| uppercase}}</a>
+                </li>
+            </ul>                   
+        </div>
+        
+        <div class="content" #scrollContainer>
+
+            <div id="section1">
+                    <h2>Introduction</h2>
+                    <p> The Consumer Price Index (CPI) is a price index, the price of a weighted average market basket 
+                        of consumer goods and services purchased by households. Changes in measured CPI track changes in prices 
+                        over time <a href="https://en.wikipedia.org/wiki/Consumer_price_index">See more</a>. Now we goint to see how to calculate
+                        this index.
+                    </p>
+
+                    <p> We use the Consumer price index manual. So, before to start with formulas and code we need some concepts about the Consumer Price I ndex:</p>
+                    <ol>
+                        <li>
+                            All products needed to calculate the CPI are called <b>articles</b>, the articles are grouped into
+                            <b>basic expenses</b>, the basic expanses into <b>subgroups</b>, the subgroups into <b>groups</b>, the groups
+                            into <b>clusters</b> and the clusters into <b>divisions</b>. This are the six <b>categories</b>.
+                        </li>
+                        <li>
+                            Each product/article has price (\$) and quantity (g) in the time t (month). The price and weight is obtained from markets,
+                            supermarkets and stores (sources).
+                        </li>
+                        <li>
+                            All articles have periodicity, for example, one article has periodicity {{'$6$'}} if the information about its price
+                            it's present in january and july.
+                        </li>
+                    </ol>
+                    <p>To calculate the article category indices we use the geometric mean, and to pass fron article category indices to upper 
+                        category indices we use the a weighted arithmetic mean.
+                    </p>                        
+                    <p>In this practice we calculate the CPI of a country divided into eight regions and each region has a database. All databses
+                        has the same tables. Therefore, we calculate the CPI in each region and then the overall CPI.
+                    </p>
+                    
+            </div>
+
+            <div id="section2">
+                <h2>Database Connection</h2>
+
+                <p>First create a class in python called CPI with the next attributes</p>
+
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                def __init__(self,server : str,user : str,pas : str) -> None:
+                                    self.codes = &#123;'Art': [],'Gba': [],'Sub': [],'Gru': [],'Agr': [],'Div': []&#125;
+                                    self.lencodes = &#123;'Art': 9,'Gba': 7,'Sub': 5,'Gru': 4,'Agr': 3,'Div': 2&#125;
+                                    self.periods : pd.DataFrame
+                                    self.catwei = &#123;'Art': [],'Gba': [],'Sub': [],'Gru': [],'Agr': [],'Div': []&#125;
+                                    self.regwei : pd.DataFrame
+                                    self.di = &#123;'Art':6,'Gba':5,'Sub':4,'Gru':3,'Agr':2,'Div':1&#125;
+                                    self.variations : pd.DataFrame 
+                                    self.indcat : pd.DataFrame
+                                    self.indant : pd.DataFrame
+                                    self.server = server
+                                    self.user = user 
+                                    self.pas = pas
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>                    
+                </div>
+
+                <p>To get the data, first   use credentials to establish connection to database</p>
+                
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                            def conectar(self, database : str) -> sqlalchemy.engine.Engine:                    
+                                try:
+                                    #Drivers: ODBC Driver 17 for SQL Server/SQL Server Native Client 11.0
+                                    driver = 'ODBC Driver 17 for SQL Server'
+                                    database_connection = f'mssql://&#123;self.user&#125;:&#123;self.pas&#125;@&#123;self.server&#125;/&#123;database&#125;?driver=&#123;driver&#125;'
+                                    engine = create_engine(database_connection)
+                                    connection = engine.connect()
+                                    return connection
+                                except:
+                                    print('Connection failed!')                 
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section3">
+                <h2>Essential Functions</h2>
+                <p> In this section it is presented basic functions (queries to get periodicity, weights and codes) needed to pass from one category to other, especially to pass from 
+                articles category to next category.</p>
+
+
+                <p>With this method is posible get codes of elements from one category specifying it with 'cod'</p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                            def Codes(self, cod : str) -> None:
+        
+                                query = f"SELECT DISTINCT &#123;cod&#125;Cod FROM DB1.dbo.CODES&#123;self.di[cod]&#125;"
+                                        idx = cod+'Cod' 
+                                self.codes[cod] = pd.read_sql(query, self.connect('master'), idx)
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <p>Just articles category has periodicity attribute, this periodicity is different in each region, so is important especify the number region.  </p>
+
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                            def Periods(self, region : int) -> None:
+        
+                                query = f"SELECT ArtCod, ArtPRC FROM DB&#123;region&#125;.dbo.ARTICLES ORDER BY ArtCod"
+                                idx = 'ArtCod'
+                                self.periods = pd.read_sql(query, self.connect('master'), index_col=idx)
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <p>In the same way that query the codes is posible query the category weights.</p>
+
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                            def CatWei(self, cod : str) -> None:        
+                                query = f'SELECT a.&#123;cod&#125;Cod, a.&#123;cod&#125;Pon as "R1", b.&#123;cod&#125;Pon as "R2", c.&#123;cod&#125;Pon as "R3", d.&#123;cod&#125;Pon as "R4", e.&#123;cod&#125;Pon as "R5", f.&#123;cod&#125;Pon as "R6", g.&#123;cod&#125;Pon as "R7", h.&#123;cod&#125;Pon as "R8"\
+                                        FROM  DB1.dbo.WEIGHTS&#123;self.di[cod&#125; a\
+                                        INNER JOIN DB2.dbo.WEIGHTS&#123;self.di[cod]&#125; b ON a.&#123;cod&#125;Cod = b.&#123;cod&#125;Cod\
+                                        INNER JOIN DB3.dbo.WEIGHTS&#123;self.di[cod]&#125; c ON a.&#123;cod&#125;Cod = c.&#123;cod&#125;Cod\
+                                        INNER JOIN DB4.dbo.WEIGHTS&#123;self.di[cod]&#125; d ON a.&#123;cod&#125;Cod = d.&#123;cod&#125;Cod\
+                                        INNER JOIN DB5.dbo.WEIGHTS&#123;self.di[cod]&#125; e ON a.&#123;cod&#125;Cod = e.&#123;cod&#125;Cod\
+                                        INNER JOIN DB6.dbo.WEIGHTS&#123;self.di[cod]&#125; f ON a.&#123;cod&#125;Cod = f.&#123;cod&#125;Cod\
+                                        INNER JOIN DB7.dbo.WEIGHTS&#123;self.di[cod]&#125; g ON a.&#123;cod&#125;Cod = g.&#123;cod&#125;Cod\
+                                        INNER JOIN DB8.dbo.WEIGHTS&#123;self.di[cod]&#125; h ON a.&#123;cod&#125;Cod = h.&#123;cod&#125;Cod\
+                                        ORDER BY a.&#123;cod&#125;Cod'              
+                                self.catwei[cod] = pd.read_sql(query, self.connect('master'), index_col=cod+'Cod')
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                In the final part, after to calculate the CPI per region, it is necessary make a weighted average to get the general CPI.
+                So, the next method query the region weights.
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                            def RegWei(self) -> None:
+        
+                                query = f'SELECT a.RegWei, b.RegWei, c.RegWei, d.RegWei, e.RegWei, f.RegWei, g.RegWei, h.RegWei \
+                                        FROM DB1.dbo.REGINF a \
+                                        INNER JOIN DB2.dbo.REGINF b ON a.RegCod != b.RegCod\
+                                        INNER JOIN DB3.dbo.REGINF c ON a.RegCod != c.RegCod\
+                                        INNER JOIN DB4.dbo.REGINF d ON a.RegCod != d.RegCod\
+                                        INNER JOIN DB5.dbo.REGINF e ON a.RegCod != e.RegCod\
+                                        INNER JOIN DB6.dbo.REGINF f ON a.RegCod != f.RegCod\
+                                        INNER JOIN DB7.dbo.REGINF g ON a.RegCod != g.RegCod\
+                                        INNER JOIN DB8.dbo.REGINF h ON a.RegCod != h.RegCod'            
+                                self.regwei = pd.read_sql(query, self.connect('master'))
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <p>This function join and align the category indices of all regions using the its dataframe index (codes).</p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                            def joinAndAlign(self, df1 : pd.DataFrame, df2 : pd.DataFrame):
+                                df1 = df1.merge(df2, how='outer', left_index=True, right_index=True,)
+                                return df1    
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section4">
+                <h2>Variations</h2>
+                <p>The variation of an article for {{'$a$'}} in the current period {{'$t$'}}, current month, for the source {{'$s$'}} is:</p>                
+                <p style="text-align:center">{{'$V_{s,a,t} =\\frac{P_t Q_{t-1}}{P_{t-1} Q_t}$'}}</p>
+                <ol>
+                    <li>
+                        Variations with <b>change reference</b> {{"ArtCR $=$ 'SI'"}} must be replaced by {{"$1,0$"}}
+                    </li>                        
+                    <li>
+                        Variations whose value is undefined must be replaced by {{"$1,0$"}}
+                    </li>                        
+                </ol>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                            def Variations(self, year : int, month : int, region : int) -> None:
+        
+                                query = f"SELECT ArtCod, PrePri,CurPri,PreQua,CurQua,ArtCR FROM DB&#123;region&#125;.dbo.PRICES\
+                                    WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125; \
+                                    ORDER BY ArtCod"
+                                temp = pd.read_sql(query, self.connect('master'), index_col='ArtCod')
+                                temp['Variation'] = (temp['CurPri']*temp['PreQua'])/(temp['PrePri']*temp['CurQua'])
+                                temp.loc[temp['ArtCR'] == 'S', 'Variation'] = 1.0
+                                self.variations = temp['Variation'].replace([np.nan,np.inf],1.0).to_frame()
+                              
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="section5">
+                <h2>
+                    F. Variations
+                </h2>
+                <p>The index of one article is called flexible variation. The flexible variation of one article is:</p>
+                <p style="text-align: center;">{{'$V_a = \\prod_{s=1}^n V_{s,a,t}$  raised to the  $\\frac{1}{nm}$ power.'}}</p>                
+                <p>
+                    where {{'$m$'}} is periodicity 
+                    of the article, {{'$n$'}} the number of sources and {{'$V_{s,a,t}$'}} is the variation of the article {{'$a$'}} for the
+                    source {{'$s$'}} in the current month {{'$i$'}}.
+                </p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                            def VarFlex(self) -> None:     
+
+                                groupBy = self.variations.groupby(self.variations.index)     
+                                df = pd.DataFrame(columns=['ArtInd'], index=groupBy.groups.keys())
+                                self.periods['ArtPRC'] = self.periods['ArtPRC'].astype(float)
+                                for index in self.codes['Art'].index:
+                                    period = self.periods.loc[index][0] 
+                                    try:
+                                        arreglo = groupBy.get_group(index)['Variation']
+                                        df.loc[index]['ArtInd'] = sp.gmean(arreglo)**(1/period)
+                                    except KeyError:
+                                        pass
+                                self.indcat = df 
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="section6">
+                <h2>Category Indices</h2>
+                <p>The indices of the next category can be calculate using:</p>
+                <p style="text-align: center;">
+                    {{'$ R_{GB} = \\vec{\\alpha} \\cdot \\vec{V} $'}}
+                </p>
+                <p>
+                    where {{'$\\vec{\\alpha}$'}} is the weight vector, {{'$\\vec{V}$'}} is the vector of indices and {{'$ R_{GB}$'}} 
+                    the relative index. To get the true index is necessary multiply by {{'$I_{GB}(t-1)$'}}, the corresponding index of the
+                    previous month:
+                </p>
+                <p style="text-align: center;">
+                    {{'$I_{GB}(t)= R_{GB} \\times I_{GB}(t-1)$'}}    
+                </p>
+                <p>So, in this instance, the below method calculate the relative.</p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python"> 
+                            def IndCat(self, codInf : str, codSup : str, region : int) -> None:  
+
+                                union = self.indcat.merge(self.catwei[codInf]['R'+str(region)], how='inner', left_index=True, right_index=True,)        
+                                groupBy = union.groupby(union.index.str[:self.lencodes[codSup]]).apply(lambda x: (x[codInf+'Ind']*(x['R'+str(region)]/x['R'+str(region)].sum())).sum())
+                                df = pd.DataFrame(columns=[codSup+'Ind'], index=self.codes[codSup].index)
+                                df.loc[groupBy.index,codSup+'Ind'] = groupBy
+                                self.indcat = df
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <p>And this method query the index in the month {{'$t-1$'}}</p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python"> 
+                            def IndAnt(self, year : int, month : int, cod : str) -> None:
+
+                                query = f'SELECT a.&#123;cod&#125;Cod, a.&#123;cod&#125;Ind, b.&#123;cod&#125;Ind, c.&#123;cod&#125;Ind, d.&#123;cod&#125;Ind, e&#123;cod&#125;Ind, f.&#123;cod&#125;Ind, g&#123;cod&#125;Ind, h.&#123;cod&#125;Ind \
+                                    FROM (SELECT &#123;cod&#125;Cod, &#123;cod&#125;Ind FROM DB1.dbo.INDICES&#123;self.di[cod]&#125; \
+                                    WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125;) a \
+                                    FULL OUTER JOIN (SELECT &#123;cod&#125;Cod, &#123;cod&#125;Ind FROM DB2.dbo.INDICES&#123;self.di[cod]&#125; \
+                                    WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125;) b ON a.&#123;cod&#123;Cod = b.&#123;cod&#125;Cod\
+                                    FULL OUTER JOIN (SELECT &#123;cod&#125;Cod, &#123;cod&#125;Ind FROM DB3.dbo.INDICES&#123;self.di[cod]&#125; \
+                                    WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125;) c ON a.&#123;cod&#125;Cod = c.&#123;cod&#125;Cod\
+                                    FULL OUTER JOIN (SELECT &#123;cod&#125;Cod, &#123;cod&#125;Ind FROM DB4.dbo.INDICES&#123;self.di[cod]&#125; WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125;) d ON a.&#123;cod&#125;Cod = d.&#123;cod&#125;Cod\
+                                    FULL OUTER JOIN (SELECT &#123;cod&#125;Cod, &#123;cod&#125;Ind FROM DB5.dbo.INDICES&#123;self.di[cod]&#125; WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125;) e ON a.&#123;cod&#125;Cod = e.&#123;cod&#125;Cod\
+                                    FULL OUTER JOIN (SELECT &#123;cod&#125;Cod, &#123;cod&#125;Ind FROM DB6.dbo.INDICES&#123;self.di[cod]&#125; WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125;) f ON a.&#123;cod&#125;Cod = f.&#123;cod&#125;Cod\
+                                    FULL OUTER JOIN (SELECT &#123;cod&#125;Cod, &#123;cod&#125;Ind FROM DB7.dbo.INDICES&#123;self.di[cod]&#125; WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125;) g ON a.&#123;cod&#125;Cod = g.&#123;cod&#125;Cod\
+                                    FULL OUTER JOIN (SELECT &#123;cod&#125;Cod, &#123;cod&#125;Ind FROM DB8.dbo.INDICES&#123;self.di[cod]&#125; WHERE YEAR = &#123;year&#125; AND MONTH = &#123;month&#125;) h ON a.&#123;cod&#125;Cod = h.&#123;cod&#125;Cod'
+                                self.indant = pd.read_sql(query, self.connect('master'), index_col=cod+'Cod')
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>                
+            </div>
+
+            <div id="section7">
+                <h2>Consumer Price Index</h2>
+                <p>Now there is an object with the capacity to calculate the CPI. The last method is the builder that use all previous methods. </p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python"> 
+                            def Builder(self,year : int, month : int) -> None:
+
+                                #Ponderaciones de todas las categorías
+                                self.CatWei('Art')
+                                self.CatWei('Gba')
+                                self.CatWei('Div')
+                                #códigos de todas las categorías
+                                self.Codes('Art')
+                                self.Codes('Gba')
+                                self.Codes('Div')
+                                #Obtenemos los índices del month anterior
+                                if month == 1:
+                                    self.IndAnt(year - 1, 12, 'Gba')
+                                else:
+                                    self.IndAnt(year, month - 1, 'Gba')
+                                for i in range(1,9):     
+                                    self.Variations(year, month, i)
+                                    
+                                    #-------------------------------------------------------------------
+                                    self.Periods(i)
+                                    self.VarFlex()
+                                    self.IndCat('Art','Gba', i)
+                                    if i == 1:
+                                        df = self.indcat.copy()
+                                    else:
+                                        df = self.joinAndAlign(df, self.indcat.copy())
+                                indact = np.multiply(df,self.indant).replace(np.nan,0.0)
+                                idiv = indact.groupby(indact.index.str[:self.lencodes['Div']]).sum()
+                                #continuar con las ponderaciones, pero dentro del ciclo
+                                cpiR = np.multiply(idiv, self.catwei['Div']).sum()/100
+                                print(round(np.dot(cpiR,self.regwei.loc[0])/100,4))
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>                
+                <p>Finally create an instance of CPI, this takes credentials from console, called "temp" and execute builder method.</p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python"> 
+                            temp = CPI(sys.argv[1],sys.argv[2], sys.argv[3])
+                            temp.Builder(int(sys.argv[4]),int(sys.argv[5]))
+                            </code>
+                        </pre>
+                        <button id="copy-button" >
+                            Copy
+                        </button>
+                    </div>
+                </div>    
+
+
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+.total{
+    flex-direction: column;
+    justify-content: space-between;    
+}
+
+.footer{
+    height: 50%;
+}

@@ -1,2 +1,3 @@
-2023/10/14-17:53:40.175 199f8 Creating DB /home/lmdc/Documents/WebPage/Local Storage/leveldb since it was missing.
-2023/10/14-17:53:40.209 199f8 Reusing MANIFEST /home/lmdc/Documents/WebPage/Local Storage/leveldb/MANIFEST-000001
+2023/10/29-18:05:16.009 13dd Reusing MANIFEST /home/lmdc/Documents/WebPage/Local Storage/leveldb/MANIFEST-000001
+2023/10/29-18:05:16.010 13dd Recovering log #3
+2023/10/29-18:05:16.011 13dd Reusing old log /home/lmdc/Documents/WebPage/Local Storage/leveldb/000003.log 

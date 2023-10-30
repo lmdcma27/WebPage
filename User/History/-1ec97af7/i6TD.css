@@ -1,0 +1,134 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.global {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 80%;
+  background-color: black;
+}
+
+.tableOfContents {
+  display: flex;
+  flex-direction: column;
+  width: 19%;
+  position: fixed;
+  flex: 3;
+  color: white;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  align-items: center;
+
+}
+
+.tableOfContents li:hover{
+  color: black;
+  background-color: white;  
+  font-size: 22px;
+  border-radius: 11px;
+  text-align: left;
+}
+
+.content {
+  flex: 2;
+  
+  padding: 2.1%;
+  width: 75%;
+  margin-left: 20%;
+  border-style: groove;
+  border-color: grey;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: white;
+  overflow: y;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  margin-top: 40px;
+}
+
+a {
+  text-decoration: none;
+  color: gray;
+}
+
+a:hover {
+  text-decoration:solid;
+}
+
+a[href^="#"] {
+  transition-duration: 10000s; /* Change this to adjust the animation speed */
+}
+
+#section1,
+#section2,
+#section3,
+#section4,
+#section5,
+#section6,
+#section7,
+#section8{
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+
+
+.container {
+  width: 90%;
+  height: 100%;
+  overflow: auto;
+  border-radius: 12px;
+  margin-left: 10%;
+}
+
+[language-python^="{{ }}"] {
+  display: none;
+}
+
+.code-wrapper {
+  position: relative;
+
+}
+
+#copy-button{
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 7px;
+  background-color: #2d2d2d;
+  outline: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+  opacity: 0;
+  border: 1px solid antiquewhite;
+}
+
+#copy-button.show-msg{
+  display: none;
+
+}
+#copy-button:hover{
+  background-color: #423e3e;
+}
+
+.code-wrapper:hover #copy-button{
+  opacity: 1;
+}
+
+
+
+p {
+  text-indent: 2em;
+ }
+

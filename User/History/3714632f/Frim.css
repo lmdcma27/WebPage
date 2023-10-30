@@ -1,0 +1,59 @@
+.header {
+    background-color: black;
+    text-align: left;
+    color: rgb(238, 232, 232);
+    position: relative;
+    width: 100%;
+    height: 8vh;
+}
+.logo {
+    float: left;
+    padding: 0.5vh;
+}
+
+.navbar { 
+    float: right;
+    overflow: hidden;
+    width: 49%;
+}
+.navbar a {
+    
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+
+.navbar a:hover {
+    background-color: white;
+    border-style: solid;
+    border-radius: 20px;
+    border-color: blue;
+    color: orange;
+    font-size: 18px;
+}
+
+.github a:hover{
+    background-color: rgb(12, 12, 12);
+    border-style: solid;
+    border-radius: 20px;
+    border-color: rgb(239, 239, 245);
+    color: rgb(0, 255, 115);
+    font-size: 18px;
+}
+
+.navegation {
+    float: right;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    /* set the display property of the ul element to flex */
+}
+
+li {
+    margin: 5px;
+    /* add some spacing between list items */
+}
