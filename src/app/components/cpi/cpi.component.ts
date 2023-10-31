@@ -1,25 +1,28 @@
   import { ViewportScroller } from '@angular/common';
-  import { Component, AfterViewInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
+  import { Component, AfterViewInit,OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
   import { TableOfContents } from './tableOfContents';
   import { ReloadService } from '../../services/reload.service'
+  import { Router } from '@angular/router';
   
   @Component({
     selector: 'app-cpi',
     templateUrl: './cpi.component.html',
     styleUrls: ['./prism.css','./cpi.component.css']
   })
-  export class CpiComponent implements AfterViewInit {    
+  export class CpiComponent implements OnInit {    
     @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
 
     tableOfContents = TableOfContents;
   
 
-    constructor(private renderer: Renderer2,private viewportScroller: ViewportScroller,private reloadService: ReloadService) {}
+    constructor(private renderer: Renderer2,private viewportScroller: ViewportScroller,private reloadService: ReloadService,private router: Router) {}
     
-    ngAfterViewInit() {
-      this.loadScript('../../../assets/prism.js', 'js');
+    ngOnInit() {
+      console.log("--------------------------------------")
+      console.log(this.router.url)
+      this.loadScript('./assets/prism.js', 'js');
       window.onload = () => {
-        this.loadScript('../../../assets/main.js', 'js');
+        this.loadScript('./assets/main.js', 'js');
       };
     }
 
