@@ -11,7 +11,12 @@ html {
   position: relative;  
 }
 
-.tableOfContents {
+.toc{
+  display: flex;
+  flex: 1.1;  
+}
+
+/*.tableOfContents {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -24,11 +29,10 @@ html {
 
 .tableOfContents li:hover{
   color: black;
-  background-color: white;  
-  font-size: 22px;
-  border-radius: 11px;
+  background-color: white;    
+  border-radius: 20px;
   text-align: left;
-}
+}*/
 
 .content {
   padding: 2.1%;
@@ -48,7 +52,7 @@ ul {
 }
 
 li {
-  margin-top: 40px;
+  margin-top: 8%;
 }
 
 a {
@@ -75,7 +79,6 @@ a[href^="#"] {
   padding: 20px;
   margin-bottom: 20px;
 }
-
 
 
 .container {

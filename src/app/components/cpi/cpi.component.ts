@@ -1,7 +1,4 @@
-  import { ViewportScroller } from '@angular/common';
-  import { Component, AfterViewInit,OnInit, ElementRef, Renderer2, ViewChild } from '@angular/core';
-  import { TableOfContents } from './tableOfContents';
-  import { ReloadService } from '../../services/reload.service'
+  import { Component, OnInit } from '@angular/core';
   import { Router } from '@angular/router';
   
   @Component({
@@ -10,16 +7,22 @@
     styleUrls: ['./prism.css','./cpi.component.css']
   })
   export class CpiComponent implements OnInit {    
-    @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
+    
 
-    tableOfContents = TableOfContents;
+    tableOfContents: Array<string>[]= [
+      ['section1','Introduction'],
+      ['section2','Database connection'],
+      ['section3','Essential Functions'],
+      ['section4','Variations'],
+      ['section5','F. Variations'],
+      ['section6','Category indices'],
+      ['section7','Consumer Price Index'],
+    ];
   
 
-    constructor(private renderer: Renderer2,private viewportScroller: ViewportScroller,private reloadService: ReloadService,private router: Router) {}
+    constructor() {}
     
-    ngOnInit() {
-      console.log("--------------------------------------")
-      console.log(this.router.url)
+    ngOnInit() {      
       this.loadScript('./assets/prism.js', 'js');
       window.onload = () => {
         this.loadScript('./assets/main.js', 'js');
@@ -43,13 +46,10 @@
     }
     
 
-    public onClick(elementId: string): void { 
-      const container = this.scrollContainer.nativeElement;
+    scrollToSection(elementId: string): void {
       const elementToScrollTo = document.getElementById(elementId);
-  
       if (elementToScrollTo) {
-        const scrollPosition = elementToScrollTo.offsetTop;
-        this.renderer.setProperty(container, 'scrollTop', scrollPosition);
+        elementToScrollTo.scrollIntoView({ behavior: 'smooth' });
       }
     }
 

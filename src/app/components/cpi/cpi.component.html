@@ -13,16 +13,12 @@
     <app-header></app-header>
     
     <div class="global">
-        <div class="tableOfContents">
-            <app-reload></app-reload>
-            <ul>
-                <li *ngFor="let section of tableOfContents">
-                    <a (click)="onClick(section[0])"> {{section[1]| uppercase}}</a>
-                </li>
-            </ul>                   
-        </div>
         
-        <div class="content" #scrollContainer >
+        <div class="toc">
+            <app-table-of-contents [tableOfContents]="tableOfContents" (scrollToElement)="scrollToSection($event)"></app-table-of-contents>
+        </div>        
+        
+        <div class="content" #scrollContainer>
 
             <div id="section1">
                     <h2>Introduction</h2>
@@ -32,7 +28,7 @@
                         this index.
                     </p>
 
-                    <p> We use the Consumer price index manual. So, before to start with formulas and code we need some concepts about the Consumer Price I ndex:</p>
+                    <p> We use the Consumer price index manual. So, before to start with formulas and code we need some concepts about the Consumer Price Index:</p>
                     <ol>
                         <li>
                             All products needed to calculate the CPI are called <b>articles</b>, the articles are grouped into
@@ -370,11 +366,11 @@
                                 self.CatWei('Art')
                                 self.CatWei('Gba')
                                 self.CatWei('Div')
-                                #códigos de todas las categorías
+                                #codes of the necessary categories
                                 self.Codes('Art')
                                 self.Codes('Gba')
                                 self.Codes('Div')
-                                #Obtenemos los índices del month anterior
+                                #we get the índices of the previous month
                                 if month == 1:
                                     self.IndAnt(year - 1, 12, 'Gba')
                                 else:
@@ -392,7 +388,7 @@
                                         df = self.joinAndAlign(df, self.indcat.copy())
                                 indact = np.multiply(df,self.indant).replace(np.nan,0.0)
                                 idiv = indact.groupby(indact.index.str[:self.lencodes['Div']]).sum()
-                                #continuar con las ponderaciones, pero dentro del ciclo
+                                
                                 cpiR = np.multiply(idiv, self.catwei['Div']).sum()/100
                                 print(round(np.dot(cpiR,self.regwei.loc[0])/100,4))
                             </code>

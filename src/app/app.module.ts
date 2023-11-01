@@ -16,6 +16,7 @@ import { KatexModule } from 'ng-katex';
 import { Test2Component } from './components/test2/test2.component';
 import { CpiComponent } from './components/cpi/cpi.component';
 import { ReloadComponent } from './components/reload/reload.component';
+import { TableOfContentsComponent } from './components/table-of-contents/table-of-contents.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { ReloadComponent } from './components/reload/reload.component';
     Test2Component,
     CpiComponent,
     ReloadComponent,
+    TableOfContentsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,8 @@
+<div class="tableOfContents">
+        <app-reload></app-reload>
+        <ul>
+            <li *ngFor="let section of tableOfContents">
+                <a (click)="onClick(section[0])"> {{section[1]| uppercase}}</a>
+            </li>
+        </ul>                   
+</div>
