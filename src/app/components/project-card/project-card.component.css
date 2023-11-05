@@ -1,0 +1,22 @@
+.projectBox,.practiceBox{
+        width: 90%;    
+        background-color: white;    
+        border-style: solid;
+        border-color: black;
+        border-bottom-right-radius: 35px;
+        border-top-left-radius: 35px;
+        height: 25%;
+        text-align: center;
+        margin: 3%;
+    }
+    
+    .projectBox a:hover,.practiceBox a:hover{
+        background-color: white;
+        color: orange;
+        font-size: 22px;
+    }
+    
+    .projectBox:hover,.practiceBox:hover{
+        background-color: white;
+        border-color: blue;
+    }

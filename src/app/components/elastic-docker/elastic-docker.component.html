@@ -1,0 +1,233 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <app-header></app-header>
+
+    <div class="global">
+        <div class="toc">
+            <app-table-of-contents [tableOfContents]="tableOfContents"
+                (scrollToElement)="scrollToSection($event)"></app-table-of-contents>
+        </div>
+
+        <div class="content">
+            <div id="section1">
+                <h2>Introduction</h2>
+                <p>
+                    This time we going to create a ElasticSeach (ES) instance using docker, learn
+                    how to push our data
+                    in ES indices and how to make snapshots (backups) in a local binding folder.
+                    Finally we'll restore the example indices
+                    in another ES instance. For more details see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html">ElasticSearch</a>.
+                </p>
+            </div>
+            <div id="section2">
+                <h2>Docker compose file</h2>
+                <p>The first thing to do is create the instance copy and paste the code below into a
+                    yaml file callled 'docker-compose.yaml', or '.yml'.</p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                                version: '3.9'
+                                                services:
+                                                    es01:
+                                                        container_name: es01
+                                                        image: docker.elastic.co/elasticsearch/elasticsearch:8.8.2
+                                                        environment: 
+                                                            - discovery.type=single-node
+                                                            - path.repo=/usr/share/elasticsearch/backups
+                                                        restart: always
+                                                        ports:
+                                                            - 9200:9200
+                                                        networks:
+                                                            - elastic
+                                                        volumes:
+                                                            - es_data:/usr/share/elasticsearch/data
+                                                            - ./backups:/usr/share/elasticsearch/backups
+
+                                                    kibana:
+                                                        container_name: kibana
+                                                        image: docker.elastic.co/kibana/kibana:8.8.2
+                                                        restart: always
+                                                        ports:
+                                                            - 5601:5601
+                                                        networks:
+                                                            - elastic
+
+                                                volumes:
+                                                    es_data:
+                                                networks:
+                                                    elastic:
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                When the building of the container has finished, we find a folder called 'backups' beside we docker-compose.yaml file
+            </div>
+            <div id="section3">
+                <h2>Connection</h2>
+                <p>
+                    The connection will be with python using the library elasticsearch, the '7.13.4' version works fine.
+                    We can install it in our
+                    python environment:
+                </p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                pip install elasticsearch==7.13.4   
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                Before the connection, we need the token, password and api key. In your terminal, for the token run:
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                sudo docker exec -it es01 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                and for the password:
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                sudo docker exec -it es01 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                then enter 'y' in the terminal.
+                <br>
+                <p>
+                    Now, in the 'localhost:5601' we can paste the required token. Kibana gives a verification code of 6
+                    digits and we can get from terminal keyboarding 'docker logs kibana' . After that, login with your
+                    password and
+                    user 'elastic'
+                </p>
+                <img src="./assets/images/elasticdocker/pastetoken.png"
+                    style="display: block; margin-left: auto; margin-right: auto;" alt="">
+                <img src="./assets/images/elasticdocker/codeverification.png"
+                    style="display: block; margin-left: auto; margin-right: auto;" alt="">
+
+                <p> Once in the kibana interface, find the endpoint
+                    'http://localhost:5601/app/management/security/api_keys/', click on 'Create API key' button, assign
+                    a name and copy as json.</p>
+                <img src="./assets/images/elasticdocker/apikey.png"
+                    style="display: block; margin-left: auto; margin-right: auto;" alt="">
+                <p>
+                    The connection function is
+                </p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                                <code code id="code" class="language-python"> 
+                                    from elasticsearch import Elasticsearch
+                                    import warnings
+                                    warnings.filterwarnings("ignore")    
+                                    def Connection(es_host:str,es_user:str,es_password:str,api_key:tuple):
+                                        es = Elasticsearch( hosts=[es_host],
+                                                            basic_auth=(es_user, es_password), 
+                                                            verify_certs=False,
+                                                            api_key=api_key
+                                        )
+                                        return es                
+                                </code>
+                            </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <p>So, we can verify the connection</p>
+
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                                <code code id="code" class="language-python">   
+                                    api_key=('api_id','api_key')
+                                    es=Connection('https://localhost:9200/','elastic','Z61Glr+44RZrIMBQ45zI',api_key)
+                                    print(es.info())
+                                </code>
+                            </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>                
+                and get something like this
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                                <code code id="code" class="language-python">   
+                                    &#123;'name': '349860b1705d', 
+                                          'cluster_name': 'docker-cluster', 
+                                          'cluster_uuid': 'ChyUT4WjR4GJ9S3fcqsMZQ', 
+                                          'version': &#123;'number': '8.8.2', 
+                                            'build_flavor': 'default', 
+                                            'build_type': 'docker', 
+                                            'build_hash': '98e1271edf932a480e4262a471281f1ee295ce6b', 
+                                            'build_date': '2023-06-26T05:16:16.196344851Z', 
+                                            'build_snapshot': False, 'lucene_version': '9.6.0', 
+                                            'minimum_wire_compatibility_version': '7.17.0', 
+                                            'minimum_index_compatibility_version': '7.0.0'
+                                            &#125;, 
+                                          'tagline': 'You Know, for Search'
+                                    &#125;
+                                </code>
+                            </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="section4">
+                <h2>Indices and snapshots</h2>
+                <p>
+
+
+
+
+                </p>
+            </div>
+            <div id="section5">
+                <h2>Restore indices from snapshots</h2>
+                <p>
+
+
+
+
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+</body>

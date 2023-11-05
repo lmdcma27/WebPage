@@ -8,33 +8,23 @@
 
         <div class="projectContent">
             <div class="projects">        
-                <div class="projectBox">
-                    <a routerLink="projects/cpi" routerLinkActive="active">Calculate Price Consumer Index</a>
-                    <p>Learn how to Calculate the Price Consumer Index in python using sql and advance pandas techniques</p>
-                </div>
-                <div class="projectBox">
-                    <a routerLink="/test" routerLinkActive="active">Data Cleanning: SQL vs Pandas</a>
-                    <p>Coming soon...!</p>
-                </div>
-                <div class="projectBox">
-                    <a routerLink="/test" routerLinkActive="active">Docker & Spark</a>
-                    <p>Coming soon...!</p>
-                </div>
+                <div class="projectBox" *ngFor="let project of projects">
+
+                    <a [routerLink]="project.route" routerLinkActive="active">{{project.title}}</a>
+                    <p>{{project.description}}</p>    
+                    <br>
+                    <a *ngIf="project.link!= 'no link'" [href]="project.link" target="_blank" class="ytvideo">Watch YT video</a>
+                </div>                                
             </div>
-            <div class="practices">
-                
-                <div class="practiceBox">
-                    <a href="https://colab.research.google.com/drive/1JviAw2aPuNylHSnf5M_vInQHn8iLEUQt?usp=sharing"> Dimensionality Reduction: LDA vs PCA </a>
-                    <p>This link leads to a google colab notebook.</p>
-                </div>
-                <div class="practiceBox">
-                    <a href="https://colab.research.google.com/drive/1m0yswilfy8T3vqdURn0gSQKxZD448eEV?usp=sharing">Spark, an introduction</a>
-                    <p>This link leads to a google colab notebook.</p>
-                </div>
-                <div class="practiceBox">
-                    <a routerLink="/test" routerLinkActive="active">Terraform</a>
-                    <p>Coming soon...!</p>
-                </div>
+            <div class="practices">    
+                <div class="practiceBox" *ngFor="let practice of practices">
+                    <a *ngIf="practice.link!= 'no link'; else practiceRoute" [href]="practice.link" target="_blank"> {{practice.title}} </a>
+                    <p>{{practice.description}}</p>
+                    <ng-template #practiceRoute>
+                        <!-- Define your alternative content here if practice.link is 'no link' -->
+                        <a [routerLink]="practice.route">{{practice.title}}</a>
+                    </ng-template>
+                </div>                                
             </div>
         </div>        
     </div>

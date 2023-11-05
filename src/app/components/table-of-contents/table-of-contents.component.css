@@ -1,20 +1,19 @@
 .tableOfContents {
         display: flex;
         flex: 1;
-        flex-direction: column;        
+        flex-direction: column;
         color: white;
-        margin-top: 17%;
-        margin-bottom: 17%;
-        align-items: center; 
-      }
-      
-.tableOfContents li:hover{
+        justify-content: space-between;
+        height: 50vh;
+}
+
+.tableOfContents li:hover {
         color: black;
-        background-color: white;    
+        background-color: white;
         border-radius: 20px;
         text-align: center;
-      }
+}
 
-.a{
+.a,.li,.ul {
         text-decoration: none;
 }
