@@ -1,0 +1,118 @@
+/*--------------------------CV CONTENT------------------------*/
+
+.CV{        
+    display: flex;        
+    flex-direction: column;    
+    height: 90vh;    
+    width: 100%;  
+}
+
+.page {
+    height: 100%;
+    width: 50%; /* Adjust the width as needed, 60% for 3/5 of the screen width */
+    margin: 0 auto; /* Center the sidebar horizontally */       
+    background-color: #f2f2f2;
+    padding-left: 1%;
+    padding-right: 1%;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-color: black;
+    flex-direction: column;    
+    overflow: auto;
+    display: flex;
+    justify-content: center; /* Center the content vertically */
+    align-items: center; /* Center the content horizontally */
+}
+
+.studies-table,.experience-table,.details-table,.languages-table, .certifications-table{
+    width: 100%; /* Adjust the width as needed */
+}
+
+.studies-table td {
+    text-align: left; /* Set default text alignment for cells to left */
+}
+
+
+
+.experience-table .description {
+    width: 80%; /* Set the width of the description cells to 60% */
+}
+.experience-table {
+    width: 100%; /* Adjust the width of the table as needed */
+}
+
+.experience-table .wt,.studies-table .time { 
+    width: 20%;   
+    text-align: center; /* Align the text to the right */
+    color: white; /* Set the text color to white */
+    background-color: black; /* Set the background color to black */
+}
+
+.experience-table .work,
+.studies-table .career {
+    font-weight: bold; /* Make the text bold */
+}
+
+
+.part1{
+    width: 100%;
+    height: 7%;
+    flex-direction: row;    
+    justify-content: space-between;    
+    margin-top: 2vh;
+}
+
+
+.frase{
+    float: left;
+    width: 67%;
+    padding-top: 2%;
+    margin-left: 2%;
+    font-size:  1.3rem;
+}
+
+.foto{
+    float: right;    
+    width: 29%;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+}   
+
+#Avatar{
+    display: block;
+    border-radius: 30px;
+    border: 1px solid #0e11e2;
+}
+
+.part2{
+    width: 100%;
+    height: 93%;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    margin-top: -7px;
+    margin-bottom: -7px;
+    
+}
+
+h6{
+    font-family: Georgia, serif;
+    margin-bottom: 1px; 
+    font-size: 16px;
+}
+
+hr{
+    border: none;
+    height: 2px;
+    background-color: #333;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.languages-table .language, .software-table .languages, .details-table .label, .certifications-table .year{
+    width: 15%;
+}

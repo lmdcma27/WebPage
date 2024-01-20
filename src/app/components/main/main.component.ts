@@ -12,6 +12,7 @@ export class MainComponent {
 
   public projects: ProjectCard[];
   public practices: ProjectCard[];
+  public mysql_and_spark: ProjectCard[];
 
   constructor(private _router: Router) {
     this.projects=[
@@ -45,6 +46,19 @@ export class MainComponent {
       ),
       new ProjectCard("Recursive Function, an application","Coming soon...!","no link","/test")
 
+    ]
+
+    this.mysql_and_spark=[
+      new ProjectCard("Setup MySql environment",
+                      "Take advantage of Google Cloud Shell and start to learn MySql",
+                      "no link",
+                      "no route"
+      ),
+      new ProjectCard("Setup PySpark environment",
+                      "Take advantage of Google Cloud Shell and start to learn PySpark",
+                      "no link",
+                      "no route"
+      )
     ]
 
    }  

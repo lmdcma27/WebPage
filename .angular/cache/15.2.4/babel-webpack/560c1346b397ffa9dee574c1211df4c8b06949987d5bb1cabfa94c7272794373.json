@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class ProjectCard {\n  constructor(title, description, link, route) {\n    this.title = title, this.description = description;\n    this.link = link, this.route = route;\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

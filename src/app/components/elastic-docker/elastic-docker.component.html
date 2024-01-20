@@ -26,7 +26,9 @@
                     how to push our data
                     in ES indices and how to make snapshots (backups) in a local binding folder.
                     Finally we'll restore the example indices
-                    in another ES instance. For more details see <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html">ElasticSearch</a>.
+                    in another ES instance. For more details see <a
+                        href="https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html">ElasticSearch
+                    </a>. All source code is in the <a href="https://github.com/lmdcma27/elastic-docker" style="color: green;" target="_blank">github repository</a>
                 </p>
             </div>
             <div id="section2">
@@ -74,7 +76,8 @@
                         </button>
                     </div>
                 </div>
-                When the building of the container has finished, we find a folder called 'backups' beside we docker-compose.yaml file
+                When the building of the container has finished, we find a folder called 'backups' beside we
+                docker-compose.yaml file
             </div>
             <div id="section3">
                 <h2>Connection</h2>
@@ -95,7 +98,7 @@
                         </button>
                     </div>
                 </div>
-                Before the connection, we need the token, password and api key. In your terminal, for the token run:
+                Before the connection, we need the token, password and api key. Open terminal, for the token run:
                 <div class="container">
                     <div class="code-wrapper">
                         <pre>
@@ -125,7 +128,7 @@
                 <br>
                 <p>
                     Now, in the 'localhost:5601' we can paste the required token. Kibana gives a verification code of 6
-                    digits and we can get from terminal keyboarding 'docker logs kibana' . After that, login with your
+                    digits and we can get from terminal keyboarding 'docker logs kibana' . After that, we login with
                     password and
                     user 'elastic'
                 </p>
@@ -134,7 +137,7 @@
                 <img src="./assets/images/elasticdocker/codeverification.png"
                     style="display: block; margin-left: auto; margin-right: auto;" alt="">
 
-                <p> Once in the kibana interface, find the endpoint
+                <p> Once in kibana interface, go to the endpoint
                     'http://localhost:5601/app/management/security/api_keys/', click on 'Create API key' button, assign
                     a name and copy as json.</p>
                 <img src="./assets/images/elasticdocker/apikey.png"
@@ -170,15 +173,15 @@
                         <pre>
                                 <code code id="code" class="language-python">   
                                     api_key=('api_id','api_key')
-                                    es=Connection('https://localhost:9200/','elastic','Z61Glr+44RZrIMBQ45zI',api_key)
-                                    print(es.info())
+                                    conn=Connection('https://localhost:9200/','elastic','password',api_key)
+                                    print(conn.info())
                                 </code>
                             </pre>
                         <button id="copy-button">
                             Copy
                         </button>
                     </div>
-                </div>                
+                </div>
                 and get something like this
                 <div class="container">
                     <div class="code-wrapper">
@@ -211,20 +214,215 @@
             <div id="section4">
                 <h2>Indices and snapshots</h2>
                 <p>
-
-
-
-
+                    To create a snapshot we first need a index to backup so, that's easy
                 </p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                                <code code id="code" class="language-python">   
+                                def create_index(conn,name):
+                                    if name in conn.indices.get('*').keys():
+                                        print("This index already exists")
+                                    else:
+                                        print("New index created")  
+                                        conn.indices.create(index=name) 
+                                create_index(conn,'favorite_mangas')
+                                </code>
+                            </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                Pushing some data to the new index.
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                conn.index(index='favorite_mangas',body=&#123;'Manga':'One Piece','Author':'Eiichiro Oda','Year':'1997'&#125;)
+                                conn.index(index='favorite_mangas',body=&#123;'Manga':'Hunter x Hunter','Author':'Yoshihiro Togashi ','Year':'1999'&#125;)
+                                conn.index(index='favorite_mangas',body=&#123;'Manga':'Naruto','Author':'Masashi Kishimoto','Year':'1998'&#125;)
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <p>
+                    To create a snapshot it is necessary the repository name and the index name, the index name can be a indices list, but be carefull
+                to change the snapshot name.
+                </p>
+                <p>
+                    First the function to create the repository, note that the "location" parameter in the "create_repository" function
+                    is the path inside the docker container, the same used above in the docker compose file.
+                </p>
+
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                def create_repository(conn, repository_name='my_fs_backup'):
+                                    # Snapshot repository settings
+                                    repository_type = 'fs'
+                                    repository_settings = &#123;            
+                                        "location": "/usr/share/elasticsearch/backups",
+                                        "compress": "true"
+                                    &#125;
+                                    response = conn.snapshot.create_repository(repository_name, body=&#123;
+                                        "type": repository_type,
+                                        "settings": repository_settings
+                                    &#125;, request_timeout=30)
+
+                                    print(response)
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <p>
+                    Next, the function that create the snapshot.
+                </p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                def create_snapshot(conn,index_name):
+                                
+                                    repository_name = 'my_fs_backup' #Snapshot repository name
+                                    snapshot_name = index_name+'_snapshot' # Replace with a suitable name for your snapshot
+                                    try:
+                                        response = conn.snapshot.create(repository=repository_name, snapshot=snapshot_name, body=&#123;
+                                            "indices": index_name,
+                                            "include_global_state": False
+                                            &#125;, request_timeout=300)
+
+                                        print(response)
+                                    except:
+                                        print("The index doesn't exists")  
+                                
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                create_repository(conn)
+                                create_snapshot(conn,'favorite_mangas')                                                  
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>                
+                <p>Don't forget read the <a href="https://elasticsearch-py.readthedocs.io/en/v8.10.1/">ES documentation for python</a></p>
             </div>
             <div id="section5">
-                <h2>Restore indices from snapshots</h2>
+                <h2>Restoring indices from snapshots</h2>
                 <p>
-
-
-
-
+                    Finally, it is possible restore indices from snapshots. To do this we can delete docker-compose image using "docker compose down -v" in terminal, 
+                    and repeat all steps until before creating a new index, that just take a few minutes and it's a good practice.              
                 </p>
+                <p>
+                    Before continue, here is a usefull list of function to list repositories, snapshots and indices in our instance.                    
+                </p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                def list_repositories(conn):
+                                    # List snapshot repositories
+                                    repositories = conn.snapshot.get_repository()
+                                    print("Snapshot Repositories:")
+                                    for repo_name in repositories:
+                                        print(repo_name)      
+                                            
+                                def list_snapshots(conn):
+                                    # List snapshots
+                                    repository_name = 'my_fs_backup'
+                                    snapshot_repository = conn.snapshot.get_repository(repository=repository_name)
+                                    snapshot_repository_name = snapshot_repository[repository_name]['type']
+
+                                    snapshots = conn.snapshot.get(repository=repository_name, snapshot='_all')
+                                    print("Snapshots:")
+                                    for snapshot in snapshots['snapshots']:
+                                        print(snapshot['snapshot'])
+                                        
+                                def list_indices(conn):
+                                    indices = conn.indices.get('*')
+                                    print("Indices:")
+                                    print(indices.keys())    
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <p>
+                    When a snapshot is restored it's necessary indicate a existing repository, don't forget. The code is as follow, first the restoring snapshot function                    
+                </p>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                def restore_snapshot(conn,snapshot_name,index_name):
+
+                                    # Snapshot repository name
+                                    repository_name = 'my_fs_backup'
+                                        
+                                    # Restore the snapshot
+                                    response = conn.snapshot.restore(repository=repository_name, snapshot=snapshot_name, body=&#123;
+                                        "indices": index_name
+                                    &#125;, request_timeout=300)
+                                    print(response)
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                create_repository()
+                                restore_snapshot(conn,'favorite_mangas_snapshot','favorite_mangas_restored')
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+                <p>The last part is query the info in the 'favorite_mangas_restored' index, we can try</p>
+
+
+                <div class="container">
+                    <div class="code-wrapper">
+                        <pre>
+                            <code code id="code" class="language-python">   
+                                result=conn.search(index='my_first_index',body=&#123;'query':&#123;'match_all':&#123;&#125;&#125;&#125; )
+                                for register in result['hits']['hits']:
+                                    print(register['_source'])
+                            </code>
+                        </pre>
+                        <button id="copy-button">
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                
             </div>
         </div>
 

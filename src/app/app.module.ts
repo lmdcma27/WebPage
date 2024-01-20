@@ -19,6 +19,7 @@ import { ReloadComponent } from './components/reload/reload.component';
 import { TableOfContentsComponent } from './components/table-of-contents/table-of-contents.component';
 import { ElasticDockerComponent } from './components/elastic-docker/elastic-docker.component';
 import { ProjectCardComponent } from './components/project-card/project-card.component';
+import { CvComponent } from './components/cv/cv.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { ProjectCardComponent } from './components/project-card/project-card.com
     TableOfContentsComponent,
     ElasticDockerComponent,
     ProjectCardComponent,
+    CvComponent,
   ],
   imports: [
     BrowserModule,

@@ -59,5 +59,6 @@
 
 li {
   margin: 2.3%;
+  font-size: 2vh;
   /* add some spacing between list items */
 }
