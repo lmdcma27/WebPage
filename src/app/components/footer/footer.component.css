@@ -1,7 +1,9 @@
 .footer {
-    height: 7vh;
+    height: 6vh;
     background-color: black;
     text-align: center;
+    display: flex;
+    flex-direction: column;    
     color: rgb(238, 232, 232);    
 }
 

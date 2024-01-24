@@ -29,7 +29,7 @@ export class MainComponent {
       ),
       new ProjectCard("Docker & ElasticSearch",
                       "Create ElasticSearch instance to storage and save your datasets using indices",
-                      "https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html",
+                      "https://youtu.be/7oQreXMsWzo?si=5R0_7gUIrqfSoDus",
                       "/projects/elastic-docker")
     ]
 
