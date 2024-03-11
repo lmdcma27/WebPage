@@ -61,6 +61,12 @@ export class MainComponent {
                       MySql easily and fastly",
                       "no link",
                       "practices/pyspark"
+      ),
+      new ProjectCard("ElasticSerch & MySql Connection with Logstash",
+                      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.\
+                      Learn how to migrate a ElasticSearch instance to a Cluster too.\n Coming soon...!",
+                      "no link",
+                      "/test"
       )
     ]
 
