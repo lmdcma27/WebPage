@@ -9,7 +9,7 @@
 
 .page {
     height: 100%;
-    width: 50%; /* Adjust the width as needed, 60% for 3/5 of the screen width */
+    width: 60%; /* Adjust the width as needed, 60% for 3/5 of the screen width */
     margin: 0 auto; /* Center the sidebar horizontally */       
     background-color: #f2f2f2;
     padding-left: 1%;
@@ -114,5 +114,5 @@ hr{
 }
 
 .languages-table .language, .software-table .languages, .details-table .label, .certifications-table .year{
-    width: 15%;
+    width: 20%;
 }

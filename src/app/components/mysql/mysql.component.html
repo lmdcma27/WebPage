@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <app-header></app-header>
+
+    <div class="global">
+        <div class="toc">
+            <app-table-of-contents [tableOfContents]="tableOfContents"
+                (scrollToElement)="scrollToSection($event)"></app-table-of-contents>
+        </div>
+
+        <div class="content">
+            <div id="section1">
+                <h2>Introduction</h2>
+                <p>
+                    In this little practice i will show you to setup your mysql environment using the cloud shell.
+                It is completely free and just take a few minutes. The main advantage is you don't need use your machine's resources or deal with software installation problems neither.
+                </p>
+                <p>
+                    It's just necessary a gmail account and follow the next steps.
+                </p>
+                <ul>
+                    <li>
+                        Go to <a href="https://cloud.google.com/shell?hl=es">Cloud Shell</a> and click console button, there is
+                        in the right upper side
+                        <p> <img src="./assets/images/mysql/console.png"
+                            style="display: block; margin-left: auto; margin-right: auto; max-width: 90%;" alt=""></p>
+                    </li>
+                    <li>
+                        Then, active the cloud shell and open the editor (Code OSS)
+                        <p> <img src="./assets/images/mysql/active_shell.png"
+                            style="display: block; margin-left: auto; margin-right: auto; max-width: 90%;" alt=""></p>
+                        <p><br></p>
+                        <p> <img src="./assets/images/mysql/open_editor.png"
+                            style="display: block; margin-left: auto; margin-right: auto; max-width: 90%;" alt=""></p>
+                    </li>
+                    <li>
+                        Next, just open the folder where you'll work. I recommend use /home/&lt;username&gt;/. You can save your docs in
+                        /home/&lt;username&gt;/ folder. Cloud shell allows saving 4 gb, enough for this practice.
+                        <p><img src="./assets/images/mysql/code_oss.png"
+                            style="display: block; margin-left: auto; margin-right: auto; max-width: 90%;" alt=""></p>
+                    </li>
+                    <li>
+                        Code OSS is an open source project without any proprietary code.
+                    </li>
+                </ul>
+            </div>  
+            <div id="section2">
+                <h2>MySql Installation</h2>
+                <p>Cloud shell provide many tools and libraries to work like docker, python and java. 
+                    In this case the installation for MySql will be with docker. The editor is like vs code, so just open a terminal.</p>
+                
+                <p>With the next command is possible create a MySql container that save its info in a binding folder called 'mysql-data',
+                    map it to the 33060 port, assign the password 'mypass' to the root user and use the version 8.2.0. The container name is mysql_practice.
+                </p>
+                <app-code-box code="docker run -d -p 33060:3306 -v /home/&lt;username&gt;/mysql-data:/var/lib/mysql --name mysql_practice -e MYSQL_ROOT_PASSWORD=mypass mysql:8.2.0" ></app-code-box>
+                <p>
+                    It's import to know that when your session ends in cloud shell the mysql container will be delete. For this reason is necessary
+                    map the info to a local folder (-v /home/&lt;username&gt;/mysql-data:/var/lib/mysql), to persist the data.
+                    This is a disventage, but run it the command again you'll retrive the container in 5 seconds approx with all info.
+                </p>
+            </div>
+            <div id="section3">
+                <h2>Connection from Code OSS</h2>   
+                <p>
+                    For the connection from editor are necesasry two things. An extention and a new user with appropiate user, 
+                    because is not possible with the root user.
+                </p>
+                <p>
+                    So, first i'll create the user. In the terminal type:
+                </p>
+                <app-code-box code="docker exec -it mysql_practice bin/bash" ></app-code-box>
+                <p>
+                    Now, in the mysql container terminal.
+                </p>
+                <app-code-box code="mysql -uroot -p" ></app-code-box>
+                <p>In my case the password is 'mypass'. Next, i call my new user 'sqluser'.</p>
+                <app-code-box code="CREATE USER 'sqluser'@'%' IDENTIFIED WITH MYSQL_NATIVE_PASSWORD BY 'mysqlpass';" ></app-code-box>
+                <p>
+                    Grant privileges
+                </p>
+                <app-code-box code="GRANT ALL PRIVILEGES ON *.* TO 'sqluser'@'%';"></app-code-box>
+                <p>and flush privileges.</p>
+                <app-code-box code="FLUSH PRIVILEGES;"></app-code-box>
+                <p>
+                    In the second part, just search the extention 'mysql' in the left sidebar and install it.
+                </p>                
+                <p><img src="./assets/images/mysql/mysql_extention.png"
+                    style="display: block; margin-left: auto; margin-right: auto; max-width: 90%;" alt=""></p>
+                <p>
+                    Staying in  the left sidebar, go back to the explorer section and add a connection with your credentials.
+                    For me is 'localhost', 'sqluser','mysqlpass' and '33060'.
+                </p>
+                <p><img src="./assets/images/mysql/add_connection.png"
+                    style="display: block; margin-left: auto; margin-right: auto; max-width: 90%;" alt=""></p>
+                <p>In this point you can code your queries easily.</p>
+            </div>
+            <div id="section4">
+                <h2>Connection from Python</h2>
+                <p>
+                    To connect from python are nedded two requirements, "SQLAlchemy" and "PyMySQL". Run in the terminal
+                    with the environment active the command
+                </p>
+                <app-code-box code="pip install SQLAlchemy PyMySQL"></app-code-box>
+                <p>
+                    And you can use the function below
+                </p>
+                <app-code-box code="def Connection(user:str,pswd:str,host:str,port:str,base:str) -> sqlalchemy.engine.Engine:
+                        try:
+                            cnx = create_engine(f'mysql+pymysql://{user}:{pswd}@{host}:{port}/{base}')   
+                            conn = cnx.connect()
+                        except:
+                            print('Connection Failed')"></app-code-box>
+                <p>
+                    For my case, i just call the function like: Connection('sqluser','mysqlpass','localhost','33060',&lt;database_name&gt;)
+                </p>
+            </div>
+            <div id="section5">
+                <h2>Backup and Restore Databases</h2>                
+                <p>
+                    Finally in the last part of this practice, i'm going to create a database, a table, insert one row, backup the database,
+                    drop the database and then restore it.
+                </p>
+                <p>
+                    I'll do the backup and restore of the database passing the command from docker, the rest of command will be inside
+                    the mysql container.
+                </p>
+                <p>
+                    First open the bash container and then open mysql terminal. Like i did to create the user "sqluser".
+                </p>
+                <app-code-box code="docker exec -it mysql_practice bin/bash" ></app-code-box>
+                <p>                    
+                </p>
+                <app-code-box code="mysql -uroot -p" ></app-code-box>
+                <p>Then</p>
+                <app-code-box code="CREATE DATABASE IF NOT EXISTS MY_DATABASE;" ></app-code-box>
+                <app-code-box code="USE MY_DATABASE;" ></app-code-box>
+                <app-code-box code="CREATE TABLE IF NOT EXISTS MOVIES(id int, name varchar(25));" ></app-code-box>
+                <app-code-box code="insert into MOVIES values(1, 'Super Bad');" ></app-code-box>
+                <app-code-box code="docker exec -i mysql_practice mysqldump -usqluser -pmysqlpass MY_DATABASE>./MY_DATABASE_BACKUP.SQL" ></app-code-box>
+                <app-code-box code="DROP DATABASE MY_DATABASE;" ></app-code-box>
+                <p>
+                    Note, before to restore the database with all tables must be exists a empty database. So, i create the database again after drop it.
+                </p>
+                <app-code-box code="docker exec -i mysql_practice mysql -usqluser -pmysqlpass MY_DATABASE<./MY_DATABASE_BACKUP.SQL" ></app-code-box>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

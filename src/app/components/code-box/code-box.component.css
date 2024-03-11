@@ -1,0 +1,44 @@
+.container {
+    width: 90%;
+    height: 100%;
+    overflow: auto;
+    border-radius: 12px;
+    margin-left: 10%;
+}
+
+[language-python^="{{ }}"] {
+    display: none;
+}
+
+.code-wrapper {
+    position: relative;
+
+}
+
+#copy-button {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    padding: 7px;
+    background-color: #2d2d2d;
+    outline: none;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+    opacity: 0;
+    border: 1px solid antiquewhite;
+}
+
+#copy-button.show-msg {
+    display: none;
+
+}
+
+#copy-button:hover {
+    background-color: #423e3e;
+}
+
+.code-wrapper:hover #copy-button {
+    opacity: 1;
+}

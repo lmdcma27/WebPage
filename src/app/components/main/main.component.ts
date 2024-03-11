@@ -50,14 +50,17 @@ export class MainComponent {
 
     this.mysql_and_spark=[
       new ProjectCard("Setup MySql environment",
-                      "Take advantage of Google Cloud Shell and start to learn MySql",
+                      "Take advantage of Google Cloud Shell and start to learn: in this little \
+                      practice i'll show you how to give your first step in MySql easily and fastly",
                       "no link",
-                      "no route"
+                      "practices/mysql"
       ),
       new ProjectCard("Setup PySpark environment",
-                      "Take advantage of Google Cloud Shell and start to learn PySpark",
+                      "Take advantage of Google Cloud Shell and start to learn: in this little \
+                      practice i'll show you how to give your first step in PySpark and how to integrate with\
+                      MySql easily and fastly",
                       "no link",
-                      "no route"
+                      "practices/pyspark"
       )
     ]
 

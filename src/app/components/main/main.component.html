@@ -17,6 +17,16 @@
                 </div>                                
             </div>
             <div class="practices">    
+                <div class="practiceBox" *ngFor="let practice of mysql_and_spark">
+                    <a *ngIf="practice.link!= 'no link'; else practiceRoute" [href]="practice.link" target="_blank"> {{practice.title}} </a>
+                    <p>{{practice.description}}</p>
+                    <ng-template #practiceRoute>
+                        <!-- Define your alternative content here if practice.link is 'no link' -->
+                        <a [routerLink]="practice.route">{{practice.title}}</a>
+                    </ng-template>
+                </div>                                
+            </div>                    
+            <div class="practices">    
                 <div class="practiceBox" *ngFor="let practice of practices">
                     <a *ngIf="practice.link!= 'no link'; else practiceRoute" [href]="practice.link" target="_blank"> {{practice.title}} </a>
                     <p>{{practice.description}}</p>
@@ -25,8 +35,7 @@
                         <a [routerLink]="practice.route">{{practice.title}}</a>
                     </ng-template>
                 </div>                                
-            </div>
-            
+            </div>            
         </div>        
     </div>
 

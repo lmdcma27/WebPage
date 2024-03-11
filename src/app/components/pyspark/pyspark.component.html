@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <app-header></app-header>
+
+    <div class="global">
+        <div class="toc">
+            <app-table-of-contents [tableOfContents]="tableOfContents"
+                (scrollToElement)="scrollToSection($event)"></app-table-of-contents>
+        </div>
+
+        <div class="content">
+            <div id="section1">
+                <h2>
+                    Introduction
+                </h2>
+                <p>
+                    Apache Spark is an open-source cluster computing framework. It was originally developed at the University of California, at the AMPLab in Berkeley. The code base of the Spark project was later donated to the Apache Software Foundation, which has maintained it since then. <a href="https://es.wikipedia.org/wiki/Apache_Spark">Wikipedia</a>
+                </p>
+                <p>
+                    In this practice i going to show you to install PySpark and to make an integration with MySql using the cloud shell. So, i have a little tutorial for cloud shell, if you need, in the
+                    introduction section of this practice: <a routerLink="/practices/mysql" routerLinkActive="active">Setup MySql environment</a>.
+                </p>
+                
+                <p>
+                    Spark needs java to works, but in cloud shell you don't have to worry about that. I just download Spark from its
+                    web page, add the environment variable to the path and install PySpark.
+                </p>
+            </div>
+            <div class="section2">
+                <h2>Download Spark</h2>                
+            <p>
+                In the path '/home/&lt;username&gt;/' create a folder called Spark, open the terminal in this folder and then run the next commands
+            </p>
+            <app-code-box code="wget https://dlcdn.apache.org/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz"></app-code-box>            
+            <app-code-box code="tar -xvzf spark-3.5.1-bin-hadoop3.tgz"></app-code-box>
+            <p>The spark version i am using is clearly '3.5.1'. The java and python version in cloud shell are '17.0.10 and '3.9.2', respectively.</p>
+            </div>
+
+            <div class="section3">
+                <h2>Add Spark to the Path</h2>
+                <p>
+                    Now, open the '.bashrc' and sroll to the last line. You can use
+                </p>
+                <app-code-box code="nano ~/.bashrc"></app-code-box>
+                <p>
+                    Or just open the file with Code OSS. Now, define the 'SPARK_HOME' variable, just paste                    
+                </p>                            
+                <ul>
+                    <li>
+                         "SPARK_HOME=/home/&lt;username&gt;/Spark/spark-3.5.1-bin-hadoop3"
+                    </li>
+                    <li>
+                        "export PATH=$PATH:$SPARK_HOME/bin:$SPARK_HOME/sbin"
+                    </li>
+                </ul>
+            </div>
+            <div class="section4">
+                <h2>PySpark Installation</h2>
+                <p>
+                    Following with the installation. Create a python environment and then install the PySpark framework
+                </p>
+                <app-code-box code="pip install pyspark"></app-code-box>
+                <p>
+                    Next, open a Jupyter notebook in Code OSS, just create a '.ipynb' file and let the editor install the requirements that
+                    the editor needs. Don't forget select the environment where you install PySpark in Code OSS, you can add your environment using
+                    ctrl + shift + p.
+                </p>
+                <p>
+                    After that, you can run the next piece of code in spark, i recommend see the <a href="https://spark.apache.org/docs/latest/api/python/getting_started/testing_pyspark.html">documentation</a>.
+                </p>
+                <app-code-box code="from pyspark.sql import SparkSession
+                from pyspark.sql.functions import col
+                
+                # Create a SparkSession
+                spark = SparkSession.builder.appName('Testing PySpark Example').getOrCreate()"></app-code-box>
+                <app-code-box code="sample_data = [{'name': 'John    D.'', 'age': 30},
+                {'name': 'Alice   G.'', 'age': 25},
+                {'name': 'Bob  T.'', 'age': 35},
+                {'name': 'Eve   A.'', 'age': 28}]
+              
+              df = spark.createDataFrame(sample_data)
+              df.show()"></app-code-box>
+            </div>
+            <p>
+                The output must look like this:
+            </p>
+            <img src="./assets/images/pyspark/df_output.png"
+                            style="display: block; margin-left: auto; margin-right: auto; max-width: 90%;" alt="">
+            
+            <div class="section5">
+                <h2>PySpark & MySql Connection</h2>
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -6,13 +6,17 @@ import { TestComponent } from './components/test/test.component';
 import { Test2Component } from './components/test2/test2.component';
 import { ElasticDockerComponent } from './components/elastic-docker/elastic-docker.component';
 import { CvComponent } from './components/cv/cv.component';
+import { MysqlComponent } from './components/mysql/mysql.component';
+import { PysparkComponent } from './components/pyspark/pyspark.component';
 const routes: Routes = [
   {path: '',component: GlobalPageComponent},
   {path: 'test',component: TestComponent},
   {path: 'test2',component: Test2Component},
   {path: 'projects/cpi',component: CpiComponent},
   {path: 'projects/elastic-docker',component:ElasticDockerComponent},
-  {path: 'cv',component:CvComponent}
+  {path: 'cv',component:CvComponent},
+  {path: 'practices/mysql',component:MysqlComponent},
+  {path: 'practices/pyspark',component:PysparkComponent}
 ];
 
 @NgModule({

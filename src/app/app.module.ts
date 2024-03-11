@@ -20,6 +20,10 @@ import { TableOfContentsComponent } from './components/table-of-contents/table-o
 import { ElasticDockerComponent } from './components/elastic-docker/elastic-docker.component';
 import { ProjectCardComponent } from './components/project-card/project-card.component';
 import { CvComponent } from './components/cv/cv.component';
+import { MysqlComponent } from './components/mysql/mysql.component';
+import { PysparkComponent } from './components/pyspark/pyspark.component';
+import { ProjectPageBodyComponent } from './components/project-page-body/project-page-body.component';
+import { CodeBoxComponent } from './components/code-box/code-box.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +40,10 @@ import { CvComponent } from './components/cv/cv.component';
     ElasticDockerComponent,
     ProjectCardComponent,
     CvComponent,
+    MysqlComponent,
+    PysparkComponent,
+    ProjectPageBodyComponent,
+    CodeBoxComponent,
   ],
   imports: [
     BrowserModule,

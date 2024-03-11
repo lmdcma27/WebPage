@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <app-header></app-header>
+
+    <div class="global">
+        <div class="toc">
+            <div class="tableOfContents">
+                <app-reload></app-reload>
+                <ul>
+                    <li *ngFor="let section of tableOfContents">
+                        <a (click)="onClick(section[0])"> {{section[1]| uppercase}}</a>
+                    </li>
+                </ul>                   
+        </div>
+        </div>
+        <div class="content">
+            
+        </div>
+
+    </div>
+</body>
+</html>
+
