@@ -20,17 +20,18 @@ export class MainComponent {
                       "Learn how to Calculate the Price Consumer Index in python using sql and advance pandas techniques",
                       "no link",
                       "projects/cpi"
-      ),
-
-      new ProjectCard("Data Cleanning: SQL vs Pandas",
-                      "Coming soon...!",
-                      "no link",
-                      "/test"
-      ),
+      ),      
       new ProjectCard("Docker & ElasticSearch",
                       "Create ElasticSearch instance to storage and save your datasets using indices",
                       "https://youtu.be/7oQreXMsWzo?si=5R0_7gUIrqfSoDus",
-                      "/projects/elastic-docker")
+                      "/projects/elastic-docker"
+      ),
+      new ProjectCard("ElasticSerch & MySql Connection with Logstash",
+      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.\
+      Learn how to migrate a ElasticSearch instance to a Cluster too.\n Coming soon...!",
+      "no link",
+      "/test"
+      )
     ]
 
     this.practices=[
@@ -51,20 +52,19 @@ export class MainComponent {
     this.mysql_and_spark=[
       new ProjectCard("Setup MySql environment",
                       "Take advantage of Google Cloud Shell and start to learn: in this little \
-                      practice i'll show you how to give your first step in MySql easily and fastly",
+                      practice i'll show you how to give your first step in MySql easily and quickly",
                       "no link",
                       "practices/mysql"
       ),
       new ProjectCard("Setup PySpark environment",
                       "Take advantage of Google Cloud Shell and start to learn: in this little \
                       practice i'll show you how to give your first step in PySpark and how to integrate with\
-                      MySql easily and fastly",
+                      MySql easily and quickly",
                       "no link",
                       "practices/pyspark"
       ),
-      new ProjectCard("ElasticSerch & MySql Connection with Logstash",
-                      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.\
-                      Learn how to migrate a ElasticSearch instance to a Cluster too.\n Coming soon...!",
+      new ProjectCard("Data Cleaning and Manipulation Techniques",
+                      "I teach you techniques to solve data problems in Spark Coming soon...!",
                       "no link",
                       "/test"
       )

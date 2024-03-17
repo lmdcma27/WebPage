@@ -32,7 +32,7 @@
                     web page, add the environment variable to the path and install PySpark.
                 </p>
             </div>
-            <div class="section2">
+            <div id="section2">
                 <h2>Download Spark</h2>                
             <p>
                 In the path '/home/&lt;username&gt;/' create a folder called Spark, open the terminal in this folder and then run the next commands
@@ -42,7 +42,7 @@
             <p>The spark version i am using is clearly '3.5.1'. The java and python version in cloud shell are '17.0.10 and '3.9.2', respectively.</p>
             </div>
 
-            <div class="section3">
+            <div id="section3">
                 <h2>Add Spark to the Path</h2>
                 <p>
                     Now, open the '.bashrc' and sroll to the last line. You can use
@@ -60,7 +60,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="section4">
+            <div id="section4">
                 <h2>PySpark Installation</h2>
                 <p>
                     Following with the installation. Create a python environment and then install the PySpark framework
@@ -93,10 +93,33 @@
             <img src="./assets/images/pyspark/df_output.png"
                             style="display: block; margin-left: auto; margin-right: auto; max-width: 90%;" alt="">
             
-            <div class="section5">
-                <h2>PySpark & MySql Connection</h2>
-                
-            </div>
+            <div id="section5">
+                <h2>PySpark & MySql Connection</h2>                
+                <p>
+                In this last part. You need a minimun background in sql. Just create a database, then create a table and insert a pair of rows for the test.
+                </p>                
+                <p>
+                    The mysql connector can be download from <a href="https://dev.mysql.com/downloads/connector/j/">here</a>. Then, put the .deb in any folder open the terminal there and run
+                </p>
+                <app-code-box code="dpkg -i mysql-connector-j_8.2.0-1debian11_all.deb"></app-code-box>
+                <p>
+                    My mysql version is 8.2.0 and i select the .deb file for debian 11 because it wokrs. But more important, check if 'mysql-connector-java-8.2.0.jar' exists
+                    in '/usr/share/java' after run the command above. Because the next part is in your Jupyter notebook. Copy the next function
+                </p>
+                <app-code-box code="def mysql_spark_connection(spark_instance, user:str,password:str,host:str,port:str,database:str,table_name:str):
+                        # Define JDBC connection properties
+                        jdbc_url = f'jdbc:mysql://{host}:{port}/{database}'
+                        connection_properties = {
+                            'user': user,
+                            'password': password,
+                            'driver': 'com.mysql.cj.jdbc.Driver'
+                        }
+                        content = spark_instance.read.jdbc(url=jdbc_url,table=table_name, properties=connection_properties)
+                        return content"></app-code-box>
+                        <p>Finally, use the function passing the user and password, in my case</p>
+                        <app-code-box code="movies_df=mysql_spark_connection(spark,'sqluser','mysqlpass','localhost','33060','MY_DATABASE','MOVIES')"></app-code-box>
+                        <P>In the example the table name parameter 'MOVIES' can be changed by a query like '(query sentence) as table'.  That's all, if you run 'movies_df.show()' spark display your table.</P>
+            </div>            
         </div>
     </div>
 </body>
