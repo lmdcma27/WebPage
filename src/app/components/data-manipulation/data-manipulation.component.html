@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <app-header></app-header>
+
+    <div class="global">
+        <div class="toc">
+            <app-table-of-contents [tableOfContents]="tableOfContents"
+                (scrollToElement)="scrollToSection($event)"></app-table-of-contents>
+        </div>
+
+        <div class="content">
+            <div id="section1">
+                <h2>Abstract</h2>
+                <p>
+                    Here i'll share you a list of problems about data cleaning and manipulations, that i consider
+                    goods and needs a high level of skill to handle data, and the best way to solve it by me.
+                </p>
+                <p>
+                    I'll use pyspark and python native fuction to solve the problems.
+                </p>
+            </div>
+
+            <div id="section2">
+                <h2>Unify Duplicates Registers</h2>
+                 <p>The first problem take a dataframe and "merge vertically"</p>
+                <app-code-box code="#import pyspark tools
+                from pyspark.sql import SparkSession
+                from pyspark.sql.functions import col
+                from pyspark.sql.functions import  pandas_udf,PandasUDFType
+                
+                # Create a SparkSession
+                spark = SparkSession.builder.appName('Testing PySpark Example').getOrCreate()
+                import pandas as pd"></app-code-box>
+
+                <app-code-box code='#define dataframe sample
+                sample_data = [
+                  {"name": "John D.","birth_date":"1987-05-12","phone1":"57381294","phone2":"69024583", "id": 1},
+                  {"name": "Alice G.","birth_date":"1995-10-28","phone1":"48273691", "id": 2},
+                  {"name": "Bob T.","phone1":"12580947","phone2":"50928463", "id": 3},
+                  {"name": "Eve A.","birth_date":"2002-12-03","phone1":"36741528", "id": 4},
+                  {"name": "John D.","birth_date":"1987-05-12","phone2":"69024583", "id": 1},
+                  {"birth_date":"1995-10-28","phone2":"92867435", "id": 2},
+                  {"name": "Bob T.","birth_date":"1978-03-09","phone1":"74638290","phone2":"50928463", "id": 3},
+                  {"name": "Eve A.","phone1":"31478520", "id": 4}
+                ]
+                df = spark.createDataFrame(sample_data)'></app-code-box>
+                
+                <p>The dataframe looks like</p>
+                <img src="./assets/images/data-manipulation/merge-vertically.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+                <app-code-box code="#this function reduce the grouped registers in one row
+                @pandas_udf('id long, birth_date string, name string, phone1 string, phone2 string, phone3 string',PandasUDFType.GROUPED_MAP)
+                def unified_groups(group):
+                    new_row={}
+                    new_row['id']=list(set(group.id))[0]
+                    new_row['birth_date']=list(set(group.birth_date))[0]
+                    new_row['name']=list(set(group.name))[0]
+                    melted_df=group.melt(id_vars='id', value_vars=['phone1', 'phone2'],var_name='phones',value_name='values')
+                    phone_serie=pd.DataFrame(list(set(melted_df['values'].dropna()))) 
+                    phone_serie.index='phone'+(phone_serie.index + 1).astype(str)
+                    if 'phone3' not in phone_serie.index.values:
+                        new_row['phone3']=None
+                    return pd.DataFrame([new_row | phone_serie.to_dict()[0]])"></app-code-box>
+                <p>And after apply the unified_groups function to the grouped dataframe, the output dataframe looks like</p>
+                <app-code-box code="df.groupBy('id').apply(unified_groups).show()"></app-code-box>                
+                <img src="./assets/images/data-manipulation/merge-vertically-reduced.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+            </div>
+            <div id="section3">
+                <h2>Regex: Cleaning Phone Numbers</h2>
+                
+                <app-code-box code="from pyspark.sql import SparkSession
+                from pyspark.sql.functions import col,regexp_replace"></app-code-box>
+
+                <app-code-box code="phones=[{'phone':'+(502) 1234-5678'},
+                {'phone':'50212345678'},
+                {'phone':'(502) 9876-5432'},
+                {'phone':'+502 5025-5555'},
+                {'phone':'1234-5678'},
+                {'phone':'98765432'},
+                {'phone':'502 4444-4444'},
+                {'phone':'4444-4444'},
+                {'phone':'(502) 2222-2222'},
+                {'phone':'+502 1111-1111'},
+                {'phone':'5555-5555'},
+                {'phone':'(502) 3333-3333'},
+                {'phone':'+502 7777-7777'},
+                {'phone':'5025028-8888'},
+                {'phone':'+(502) 9999-9999'}]
+            phones_df=spark.createDataFrame(phones)"></app-code-box>
+            <p>The dataframe has just one column and the phones may has phone extention with parenthesis or not, but i just want extract the pure number without '-' or spaces</p>
+            <img src="./assets/images/data-manipulation/phones_df.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+            <p>After apply the function ther detects the phone extention and remove it, the output is</p>                            
+            <app-code-box code="phones_without_extention=phones_df.withColumn('phones_without_extention',regexp_replace('phone',r'(\+?\(?502\)?\s?)?((\d{8})|(\d{4}-?\d{4}))','$2'))"></app-code-box>            
+            <img src="./assets/images/data-manipulation/phones_without_extention_df.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+            <p>The last part of this problem is just remove any symbol that isn't a number, but for my case just replace '-' by '' and i get</p>            
+            <app-code-box code="clean_phone_column=phones_without_extention.withColumn('clean_phones',
+            regexp_replace('phones_without_extention','-',''))"></app-code-box>            
+            <img src="./assets/images/data-manipulation/phones_cleaning_df.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+            </div>            
+
+            <div id="section4">
+                <h2>Unify and Sort two Dataframes</h2>
+
+                <app-code-box code="# Merge dataframes horizontally
+                from pyspark.sql import SparkSession
+                from pyspark.sql.functions import lit, udf
+                from pyspark.sql.types import StructType, StructField, StringType,IntegerType"></app-code-box>
+
+                <app-code-box code="
+                # Create a SparkSession
+                spark = SparkSession.builder \
+                    .appName('Merge horizontally') \
+                    .getOrCreate()"></app-code-box>
+                <p>The first dataframe has 10 registers with id, name and emails</p>
+                <app-code-box code="# Define schema for the first DataFrame
+                schema = StructType([
+                    StructField('id', IntegerType(), True),
+                    StructField('name', StringType(), True),
+                    StructField('email1', StringType(), True),
+                    StructField('email2', StringType(), True)
+                ])
+                
+                # Create the first DataFrame with 10 rows
+                data = [(1, 'Alice', 'alice@example.com', 'alice.work@example.com'),
+                        (2, 'Bob', 'bob@example.com', 'bob.personal@example.com'),
+                        (3, 'Charlie', 'charlie@example.com', 'charlie.family@example.com'),
+                        (4, 'David', 'david@example.com', 'david.social@example.com'),
+                        (5, 'Eve', 'eve@example.com', 'eve.secondary@example.com'),
+                        (6, 'Frank', 'frank@example.com', 'frank.alternate@example.com'),
+                        (7, 'Grace', 'grace@example.com', 'grace.backups@example.com'),
+                        (8, 'Henry', 'henry@example.com', 'henry.help@example.com'),
+                        (9, 'Ivy', 'ivy@example.com', 'ivy.support@example.com'),
+                        (10, 'Jack', 'jack@example.com', 'jack.contact@example.com')]
+                
+                df1 = spark.createDataFrame(data, schema=schema)
+                "></app-code-box>
+                <p>If i display the dataframe df1 i get</p> 
+                <img src="./assets/images/data-manipulation/df1_emails.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+
+                <app-code-box code="schema2 = StructType([
+                StructField('id', IntegerType(), True),
+                StructField('name', StringType(), True),
+                StructField('email3', StringType(), True),
+                StructField('email4', StringType(), True)
+            ])
+            
+            # Create the second DataFrame with 6 rows
+            data2 = [(1, 'Alice', 'alice@example.com', None),
+                     (3, 'Charlie', None, None),
+                     (5, 'Eve', None, 'eve2@example.com'),
+                     (7, 'Grace', 'grace@example.com', 'grace2@example.com'),
+                     (9, 'Ivy', 'ivy@example.com', None),
+                     (11, 'John', 'john@example.com', 'john.contacts@example.com')]
+            
+            df2 = spark.createDataFrame(data2, schema=schema2)"></app-code-box>
+            <p>And doing the same for the second dataframe</p>
+            <img src="./assets/images/data-manipulation/df2_emails.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+
+            
+            <p>If i display this code "df1.join(df2,['id','name'],how='outer').select('id','email1','email2','email3','email4')", you can see the dataframe with some emails duplicates or in disorder</p>
+                <img src="./assets/images/data-manipulation/emails_df_joined.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+                            <app-code-box code="def filter_none(row):
+                        emails=tuple(filter(lambda r: r is not None, row[1:]))
+                        emails_dict=dict(map(lambda new_tuple: ('email'+str(new_tuple[0]+1),new_tuple[1]),enumerate(emails)))
+                        return {'id':row.id} | emails_dict"></app-code-box>
+            <p>So i join the dataframe by id and name columns and then convert to rdd to map the columns with the filter_none functoin</p>
+            <app-code-box code="result=df1.join(df2,['id','name'],how='outer').select('id','email1','email2','email3','email4').rdd.map(filter_none).collect()"></app-code-box>
+            <app-code-box code="spark.createDataFrame(result).toPandas().set_index('id')"></app-code-box>
+            <p>the output unified dataframe looks like</p>
+            <img src="./assets/images/data-manipulation/emails_df_unified.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+            </div>            
+        </div>  
+    </div>
+</body>
+</html>

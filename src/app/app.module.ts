@@ -24,6 +24,7 @@ import { MysqlComponent } from './components/mysql/mysql.component';
 import { PysparkComponent } from './components/pyspark/pyspark.component';
 import { ProjectPageBodyComponent } from './components/project-page-body/project-page-body.component';
 import { CodeBoxComponent } from './components/code-box/code-box.component';
+import { DataManipulationComponent } from './components/data-manipulation/data-manipulation.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { CodeBoxComponent } from './components/code-box/code-box.component';
     PysparkComponent,
     ProjectPageBodyComponent,
     CodeBoxComponent,
+    DataManipulationComponent,
   ],
   imports: [
     BrowserModule,

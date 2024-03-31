@@ -8,6 +8,7 @@ import { ElasticDockerComponent } from './components/elastic-docker/elastic-dock
 import { CvComponent } from './components/cv/cv.component';
 import { MysqlComponent } from './components/mysql/mysql.component';
 import { PysparkComponent } from './components/pyspark/pyspark.component';
+import { DataManipulationComponent } from './components/data-manipulation/data-manipulation.component';
 const routes: Routes = [
   {path: '',component: GlobalPageComponent},
   {path: 'test',component: TestComponent},
@@ -16,7 +17,8 @@ const routes: Routes = [
   {path: 'projects/elastic-docker',component:ElasticDockerComponent},
   {path: 'cv',component:CvComponent},
   {path: 'practices/mysql',component:MysqlComponent},
-  {path: 'practices/pyspark',component:PysparkComponent}
+  {path: 'practices/pyspark',component:PysparkComponent},
+  {path: 'problems/data-manipulation-techniques',component:DataManipulationComponent}
 ];
 
 @NgModule({

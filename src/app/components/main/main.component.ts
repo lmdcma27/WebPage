@@ -64,9 +64,9 @@ export class MainComponent {
                       "practices/pyspark"
       ),
       new ProjectCard("Data Cleaning and Manipulation Techniques",
-                      "I teach you techniques to solve data problems in Spark Coming soon...!",
+                      "I teach you techniques to solve data problems in Spark",
                       "no link",
-                      "/test"
+                      "problems/data-manipulation-techniques"
       )
     ]
 
