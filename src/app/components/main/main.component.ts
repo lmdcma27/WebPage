@@ -10,52 +10,30 @@ import {ProjectCard} from './project-card'
 export class MainComponent {
 
 
-  public projects: ProjectCard[];
-  public practices: ProjectCard[];
-  public mysql_and_spark: ProjectCard[];
+  public elasticsearch_cards: ProjectCard[];
+  public mysql_cards: ProjectCard[];
+  public pyspark_pandas_cards: ProjectCard[];
 
   constructor(private _router: Router) {
-    this.projects=[
-      new ProjectCard("Calculate Price Consumer Index",
-                      "Learn how to Calculate the Price Consumer Index in python using sql and advance pandas techniques",
-                      "no link",
-                      "projects/cpi"
-      ),      
+    this.elasticsearch_cards=[
       new ProjectCard("Docker & ElasticSearch",
                       "Create ElasticSearch instance to storage and save your datasets using indices",
                       "https://youtu.be/7oQreXMsWzo?si=5R0_7gUIrqfSoDus",
                       "/projects/elastic-docker"
       ),
-      new ProjectCard("ElasticSerch & MySql Connection with Logstash",
-      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.\
-      Learn how to migrate a ElasticSearch instance to a Cluster too.\n Coming soon...!",
+      new ProjectCard("ElasticSerch & MySql Connection",
+      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.\ Coming soon...!",
+      "no link",
+      "/test"
+      ),
+      new ProjectCard("Reindex indices in ElasticSearch",
+      "When or how reindex an index to optimize resources. Learn it here! \ Coming soon...!",
       "no link",
       "/test"
       )
     ]
 
-    this.practices=[
-      new ProjectCard("Dimensionality Reduction: LDA vs PCA",
-                      "The link leads to a google colab notebook.",
-                      "https://colab.research.google.com/drive/1JviAw2aPuNylHSnf5M_vInQHn8iLEUQt?usp=sharing",
-                      "no route"
-      ),
-      new ProjectCard("Spark, an introduction",
-                      "The link leads to a google colab notebook.",
-                      "https://colab.research.google.com/drive/1m0yswilfy8T3vqdURn0gSQKxZD448eEV?usp=sharing",
-                      "no route"
-      ),
-      new ProjectCard("Recursive Function, an application","Coming soon...!","no link","/test")
-
-    ]
-
-    this.mysql_and_spark=[
-      new ProjectCard("Setup MySql environment",
-                      "Take advantage of Google Cloud Shell and start to learn: in this little \
-                      practice i'll show you how to give your first step in MySql easily and quickly",
-                      "no link",
-                      "practices/mysql"
-      ),
+    this.pyspark_pandas_cards=[
       new ProjectCard("Setup PySpark environment",
                       "Take advantage of Google Cloud Shell and start to learn: in this little \
                       practice i'll show you how to give your first step in PySpark and how to integrate with\
@@ -67,7 +45,36 @@ export class MainComponent {
                       "I teach you techniques to solve data problems in Spark",
                       "no link",
                       "problems/data-manipulation-techniques"
-      )
+      ),
+      new ProjectCard("Calculate Price Consumer Index",
+                      "Learn how to calculate the Price Consumer Index using python, sql and advance pandas techniques",
+                      "no link",
+                      "projects/cpi"
+      ),
+      new ProjectCard("Miscellaneous Problems",
+                      "Here i share solutions to math  problems about graphs or optimization.\ Coming soon...!",
+                      "No link",
+                      "no route")
+    ]
+
+    this.mysql_cards=[
+      new ProjectCard("Setup MySql environment",
+                      "Take advantage of Google Cloud Shell and start to learn: in this little \
+                      practice i'll show you how to give your first step in MySql easily and quickly",
+                      "no link",
+                      "practices/mysql"
+      ),      
+      new ProjectCard("MySql: Challenge Problems",
+                      "Coming soon...!",
+                      "no link",
+                      "no route"
+      ),
+      new ProjectCard("Dimensionality Reduction: LDA vs PCA",
+                      "The link leads to a google colab notebook.",
+                      "https://colab.research.google.com/drive/1JviAw2aPuNylHSnf5M_vInQHn8iLEUQt?usp=sharing",
+                      "no route"
+      )      
+
     ]
 
    }  
