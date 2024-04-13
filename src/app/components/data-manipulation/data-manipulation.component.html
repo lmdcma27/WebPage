@@ -23,20 +23,24 @@
                     goods and needs a high level of skill to handle data, and the best way to solve it by me.
                 </p>
                 <p>
-                    I'll use pyspark and python native fuction to solve the problems.
+                    I'll use pyspark and python native functions to solve the problems.
+                </p>
+                <p>
+                    If you're new with pyspark, i left you a tutorial to setup your <a routerLink="/practices/pyspark" routerLinkActive="active">pyspark environment</a>
                 </p>
             </div>
 
             <div id="section2">
                 <h2>Unify Duplicates Registers</h2>
-                 <p>The first problem take a dataframe and "merge vertically"</p>
+                 <p>The first problem take a dataframe and "merge vertically". What i mean </p>
+                 <p>First i create my pyspark instance and then define a variable with the data to clean.</p>
                 <app-code-box code="#import pyspark tools
                 from pyspark.sql import SparkSession
                 from pyspark.sql.functions import col
                 from pyspark.sql.functions import  pandas_udf,PandasUDFType
                 
                 # Create a SparkSession
-                spark = SparkSession.builder.appName('Testing PySpark Example').getOrCreate()
+                spark = SparkSession.builder.appName('Merge Vertically').getOrCreate()
                 import pandas as pd"></app-code-box>
 
                 <app-code-box code='#define dataframe sample
@@ -55,16 +59,30 @@
                 <p>The dataframe looks like</p>
                 <img src="./assets/images/data-manipulation/merge-vertically.png"
                             style="display: block; margin-left: auto; margin-right: auto;" alt="">
-                <app-code-box code="#this function reduce the grouped registers in one row
-                @pandas_udf('id long, birth_date string, name string, phone1 string, phone2 string, phone3 string',PandasUDFType.GROUPED_MAP)
+                <p>This function reduce the grouped registers in one row. You can notice that the output must have just one row per id. So, in the function there is three parts.</p>
+                
+                <ul>                    
+                    <li> Part 1 takes the id,birth_date and name values from the first row and save in a python dictionary.</li>                    
+                    <li> Part 2 takes the phone columns and flat the sub dataframe selected to after convert in a list with unique values 
+                        without nulls
+                    </li>            
+                    <li> Part 3 handle the registers without three phones and add create a key called 'phone3' with None value to avoid 
+                        errors in the dataframe structure. Finally the unified info is returned as a dictionary.
+                    </li>        
+                </ul>
+            
+                <app-code-box code="@pandas_udf('id long, birth_date string, name string, phone1 string, phone2 string, phone3 string',PandasUDFType.GROUPED_MAP)
                 def unified_groups(group):
+                    #part 1
                     new_row={}
                     new_row['id']=list(set(group.id))[0]
                     new_row['birth_date']=list(set(group.birth_date))[0]
                     new_row['name']=list(set(group.name))[0]
+                    #part 2
                     melted_df=group.melt(id_vars='id', value_vars=['phone1', 'phone2'],var_name='phones',value_name='values')
                     phone_serie=pd.DataFrame(list(set(melted_df['values'].dropna()))) 
                     phone_serie.index='phone'+(phone_serie.index + 1).astype(str)
+                    #part 3
                     if 'phone3' not in phone_serie.index.values:
                         new_row['phone3']=None
                     return pd.DataFrame([new_row | phone_serie.to_dict()[0]])"></app-code-box>
@@ -75,7 +93,7 @@
             </div>
             <div id="section3">
                 <h2>Regex: Cleaning Phone Numbers</h2>
-                
+                <p>Like the previous problem, i import the nessesary functions that i need to create the dataframe, solve the problem and define the dataframe.</p>
                 <app-code-box code="from pyspark.sql import SparkSession
                 from pyspark.sql.functions import col,regexp_replace"></app-code-box>
 
@@ -95,10 +113,21 @@
                 {'phone':'5025028-8888'},
                 {'phone':'+(502) 9999-9999'}]
             phones_df=spark.createDataFrame(phones)"></app-code-box>
-            <p>The dataframe has just one column and the phones may has phone extention with parenthesis or not, but i just want extract the pure number without '-' or spaces</p>
+            <p>The dataframe has just one column and the phones may has phone extention with parenthesis or not, but i just want extract the raw number without '-' or spaces</p>
             <img src="./assets/images/data-manipulation/phones_df.png"
                             style="display: block; margin-left: auto; margin-right: auto;" alt="">
-            <p>After apply the function ther detects the phone extention and remove it, the output is</p>                            
+            <p>The piece of code below detect the phone extention and remove it. That is a regex and it can explain in two parts. This parts are groups:</p>
+            <ul>
+                <li>
+                    <p>The first part is \+?\(?502\)?\s? and i enclosing in (), basically find for the 502 number with all symbol that are close to it, like +, one blank space, parenthesis or the first digit in the phone number</p>
+                </li>
+                <li>
+                    <p>The second part is (\d&#123;8&#125;)|(\d&#123;4&#125;-?\d&#123;4&#125;) enclosing in () too. In regex this is an 'or' that match between a sequence of eight digits and two pairs of sequences with four digits.</p>
+                </li>
+                <li>
+                    <p>After make the match, just left the second group in a new column</p>
+                </li>
+            </ul>
             <app-code-box code="phones_without_extention=phones_df.withColumn('phones_without_extention',regexp_replace('phone',r'(\+?\(?502\)?\s?)?((\d{8})|(\d{4}-?\d{4}))','$2'))"></app-code-box>            
             <img src="./assets/images/data-manipulation/phones_without_extention_df.png"
                             style="display: block; margin-left: auto; margin-right: auto;" alt="">
