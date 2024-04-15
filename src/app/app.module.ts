@@ -25,6 +25,7 @@ import { PysparkComponent } from './components/pyspark/pyspark.component';
 import { ProjectPageBodyComponent } from './components/project-page-body/project-page-body.component';
 import { CodeBoxComponent } from './components/code-box/code-box.component';
 import { DataManipulationComponent } from './components/data-manipulation/data-manipulation.component';
+import { MysqlElasticLogstashComponent } from './components/mysql-elastic-logstash/mysql-elastic-logstash.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { DataManipulationComponent } from './components/data-manipulation/data-m
     ProjectPageBodyComponent,
     CodeBoxComponent,
     DataManipulationComponent,
+    MysqlElasticLogstashComponent,
   ],
   imports: [
     BrowserModule,

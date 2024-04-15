@@ -9,6 +9,7 @@ import { CvComponent } from './components/cv/cv.component';
 import { MysqlComponent } from './components/mysql/mysql.component';
 import { PysparkComponent } from './components/pyspark/pyspark.component';
 import { DataManipulationComponent } from './components/data-manipulation/data-manipulation.component';
+import { MysqlElasticLogstashComponent } from './components/mysql-elastic-logstash/mysql-elastic-logstash.component';
 const routes: Routes = [
   {path: '',component: GlobalPageComponent},
   {path: 'test',component: TestComponent},
@@ -18,7 +19,8 @@ const routes: Routes = [
   {path: 'cv',component:CvComponent},
   {path: 'practices/mysql',component:MysqlComponent},
   {path: 'practices/pyspark',component:PysparkComponent},
-  {path: 'problems/data-manipulation-techniques',component:DataManipulationComponent}
+  {path: 'problems/data-manipulation-techniques',component:DataManipulationComponent},
+  {path: 'mysql-elastic-logstash',component:MysqlElasticLogstashComponent}
 ];
 
 @NgModule({

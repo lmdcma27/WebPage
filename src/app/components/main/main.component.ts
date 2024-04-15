@@ -22,9 +22,9 @@ export class MainComponent {
                       "/projects/elastic-docker"
       ),
       new ProjectCard("ElasticSerch & MySql Connection",
-      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.\ Coming soon...!",
+      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.",
       "no link",
-      "/test"
+      "/mysql-elastic-logstash"
       ),
       new ProjectCard("Reindex indices in ElasticSearch",
       "When or how reindex an index to optimize resources. Learn it here! \ Coming soon...!",

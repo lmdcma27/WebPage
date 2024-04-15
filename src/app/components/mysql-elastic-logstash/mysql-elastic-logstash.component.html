@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <app-header></app-header>
+    <div class="global">        
+        <div class="toc">
+            <app-table-of-contents [tableOfContents]="tableOfContents"
+                (scrollToElement)="scrollToSection($event)"></app-table-of-contents>
+        </div>
+
+        <div class="content">
+            <div id="section1">
+                <h2>Introduction</h2>
+                <p>
+                    My intention in this practices is help you to make a connection to mysql from ElasticSearch
+                    and manage your queries like indices from kibana. It's important have a background in this tools, 
+                    if you're new you can see this tutorials before.                
+                </p>         
+                                       
+                <ul>
+                    <li><a routerLink="/practices/mysql" routerLinkActive="active">MySQL</a></li>
+                    <li><a routerLink="/projects/elastic-docker" routerLinkActive="active">ElasticSearch</a></li>
+                </ul>                
+                <p>
+                    The tool to connect MySql with ElasticSearch is Logstash, is an open source data collection engine with real-time pipelining capabilities. 
+                    Logstash can dynamically unify data from disparate sources and normalize the data into destinations of your choice. 
+                </p>
+            </div>
+            <div id="section2">
+                <h2>Project Folder</h2>
+                <p>
+                    The folder for this, looks like the image below and you  can get it in my <a href="https://github.com/lmdcma27/mysql-elastic-logstash" style="color: green;">github</a>.
+                </p>
+                <img src="./assets/images/mysql-elastic-logstash/project-folder.png"
+                            style="display: block; margin-left: auto; margin-right: auto;" alt="">
+                <p>
+                    I'm going explain briefly what is each element
+                </p>
+                <ul>
+                    <li><p>docker-compose.yaml: the compose file is taken from the <a href="https://github.com/elastic/elasticsearch/tree/8.13/docs/reference/setup/install/docker" style="color: blue;">ElasticSearch github</a> and has the 
+                    configuration to create a cluster with 3 master nodes and kibana. In addition there is two services, containers settings, the logstash and mysql services</p></li>
+                    <li><p>.env: it comes with docker-compose file and is for set the environment variables of the .yaml. In my case, i set the next values:</p></li>
+                    <app-code-box code="# Password for the 'elastic' user (at least 6 characters)
+                    ELASTIC_PASSWORD=elasticpass123
+                    # Password for the 'kibana_system' user (at least 6 characters)
+                    KIBANA_PASSWORD=elasticpass123
+                    # Version of Elastic products
+                    STACK_VERSION=8.8.2
+                    # Set the cluster name
+                    CLUSTER_NAME=docker-cluster
+                    # Set to 'basic' or 'trial' to automatically start the 30-day trial
+                    LICENSE=basic
+                    #LICENSE=trial
+                    # Port to expose Elasticsearch HTTP API to the host
+                    ES_PORT=9200
+                    #ES_PORT=127.0.0.1:9200
+                    # Port to expose Kibana to the host
+                    KIBANA_PORT=5601
+                    #KIBANA_PORT=80
+                    # Increase or decrease based on the available host memory (in bytes)
+                    MEM_LIMIT=4294967296
+                    LS_MEM_LIMIT=1073741824"></app-code-box>
+                    <li><p>mysql-connector: this folder has a .deb file, it is installed when the losgtash container start and allows it make connection with MySql and push to ElasticSearch</p></li>
+                    <li><p>logstash.conf: it has the settings for logstash to first make the connection and after insertion in the elasticsearch index.</p></li>
+                    <app-code-box code='input {
+                        jdbc {
+                          jdbc_driver_library => "/usr/share/java/mysql-connector-java-8.3.0.jar" 
+                          jdbc_driver_class => "com.mysql.cj.jdbc.Driver"
+                          jdbc_connection_string => "jdbc:mysql://db:3306/MYSQL_LOGSTASH_ELASTIC"
+                          jdbc_user => "root"
+                          jdbc_password => "my-pass"    
+                          jdbc_paging_enabled => true    
+                          schedule => "*/1 * * * * *"
+                          statement => "SELECT * FROM e_devices"
+                        }
+                    }
+
+                    output {  
+                        elasticsearch {
+                          index => "index-from-mysql-query"
+                          hosts => ["https://es01:9200"]      
+                          action => "update"
+                          doc_as_upsert => true
+                          document_id => "id"
+                          user => "elastic"
+                          password => "elasticpass123"  
+                          cacert => "/usr/share/logstash/certs/ca/ca.crt"
+                        }
+                    }'></app-code-box>
+                </ul>                                
+                <p>After all this, it's not possible run the .yaml with docker yet. As i mention, i take the compose file to deploy a cluster, so, is necessary set the parameter 'vm.max_map_count' 
+                    at least in 262144.
+                </p>
+                <app-code-box code="sysctl -w vm.max_map_count=262144"></app-code-box>
+                <p>Note: when you change the parameter value, this just persist until you turn off your machine.</p>
+                <p>Now, if you try <app-code-box code="sudo docker compose -d"></app-code-box> the containers will be created without problems
+                and can access to the stack management in kibana. But first, let's see what logstash and mysql service do</p>                
+            </div>
+            <div id="section3">
+                <h2>What does Logstash Service Do?</h2>
+                <P>
+                    If you open the compose file, the logstash service setting is
+                </P>
+                <app-code-box code='  logstash:
+                        depends_on:
+                            es01:
+                                condition: service_healthy
+                            kibana:
+                                condition: service_healthy
+                        image: docker.elastic.co/logstash/logstash:${STACK_VERSION}
+                        labels:
+                            co.elastic.logs/module: logstash
+                        user: root
+                        volumes:
+                            - logstashdata01:/usr/share/logstash/data
+                            - certs:/usr/share/logstash/certs
+                            - ./mysql-connector:/usr/share/logstash/mysql-connector
+                            - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+                        environment:
+                            - NODE_NAME="logstash"
+                            - xpack.monitoring.enabled=false
+                            - ELASTIC_USER=elastic
+                            - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+                            - ELASTIC_HOSTS=https://es01:9200
+                        command: >
+                            bash -c "
+                            dpkg -i /usr/share/logstash/mysql-connector/mysql-connector-j_8.3.0-1debian11_all.deb && 
+                            sleep 5 && logstash -f /usr/share/logstash/pipeline/logstash.conf
+                            "    
+                        ports:
+                            - "5044:5044"                    
+             '></app-code-box>
+             <p>You can peek it, but there are two important things. First, map the mysql-connector folder and the logstash.conf file, that has the MySql query, into the container</p>
+             <app-code-box code="- ./mysql-connector:/usr/share/logstash/mysql-connector
+             - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf"></app-code-box>
+             <p>Second is the command, this install the MySql connector in the logstash container, then run the logstash.conf.</p>
+             <app-code-box code='command: >
+                        bash -c "
+                        dpkg -i /usr/share/logstash/mysql-connector/mysql-connector-j_8.3.0-1debian11_all.deb && 
+                        sleep 5 && logstash -f /usr/share/logstash/pipeline/logstash.conf"'></app-code-box>
+            </div>
+            <div id="section4">
+                <h2>MySQL Service Settings</h2>
+            </div>                
+        </div>
+    </div>
+</body>
+</html>
