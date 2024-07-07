@@ -24,6 +24,11 @@
     align-items: center; /* Center the content horizontally */
 }
 
+
+p {
+    text-indent: 2em;
+   }
+
 .studies-table,.experience-table,.details-table,.languages-table, .certifications-table{
     width: 100%; /* Adjust the width as needed */
 }
@@ -77,10 +82,10 @@
 
 
 .frase{    
-    padding-top: 1.5%;    
-    width: 100%;    
-    margin-left: 60%;
-    font-size:  1.6vh;
+    padding-top: 5.5%;    
+    width: 50vh;    
+    margin-left: 50%;
+    font-size:  1.8vh;
 }
 
 .foto{
