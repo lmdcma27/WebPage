@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <app-header></app-header>
+    <div class="global">
+        <div class="toc">
+            <app-table-of-contents [tableOfContents]="tableOfContents"
+                (scrollToElement)="scrollToSection($event)"></app-table-of-contents>
+        </div>
+
+        <div class="content">
+            <div id="section1">
+                <h2>
+                    Introduction
+                </h2>
+                <p>
+                    In this practice i make a basic integration with minio and spark using k8s and helm. All the implementetion
+                    i'll show you was tested on cloud shell, this is completely free and you don't have to worry about the installation
+                    of docker, k8s or helm. Because these tools are already installed in your cloud shell machine. I left you the <a href="https://github.com/lmdcma27/minio-spark/tree/tutorial-branch" style="color: green;" target="_blank">minio-spark repository</a> on github.
+                </p>
+                <p>
+                    I must to clarify that this practice is inspired in a youtube tutorial, that i modify lightly, and you can watch <a href="https://www.youtube.com/watch?v=ZzFdYm_DqEM" style="color: red;" target="_blank">here</a>.
+                </p>
+                <p>
+                    I'll just follow the main and necessary commands, that let you replicate this practice, and explain the basic without dive
+                    a lot into the scripts content. So, let's do it!
+                </p>
+            </div>
+            <div id="section2">
+                <h2>
+                    Minio Setup
+                </h2>
+                <p>
+                    As i mention previously, cloud shell has already installed kubernetes, the first command you need to run is                    
+                </p>
+                <app-code-box code="minikube start"></app-code-box>            
+                <p>Next, clone the github repository and in the root folder create an instance of minio, you need to use the three files in minio folder.</p>
+                <app-code-box code="kubectl apply -f minio"></app-code-box>
+            </div>
+            <div id="section3">
+                <h2>
+                    Spark Setup
+                </h2>
+                fasdfsdafsdfdsa
+            </div>
+        </div>
+    </div>
+</body>
+</html>
