@@ -26,6 +26,7 @@ import { ProjectPageBodyComponent } from './components/project-page-body/project
 import { CodeBoxComponent } from './components/code-box/code-box.component';
 import { DataManipulationComponent } from './components/data-manipulation/data-manipulation.component';
 import { MysqlElasticLogstashComponent } from './components/mysql-elastic-logstash/mysql-elastic-logstash.component';
+import { MinioSparkComponent } from './components/minio-spark/minio-spark.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { MysqlElasticLogstashComponent } from './components/mysql-elastic-logsta
     CodeBoxComponent,
     DataManipulationComponent,
     MysqlElasticLogstashComponent,
+    MinioSparkComponent,
   ],
   imports: [
     BrowserModule,
