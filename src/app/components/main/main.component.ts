@@ -69,10 +69,10 @@ export class MainComponent {
                       "no link",
                       "no route"
       ),
-      new ProjectCard("Dimensionality Reduction: LDA vs PCA",
-                      "The link leads to a google colab notebook.",
-                      "https://colab.research.google.com/drive/1JviAw2aPuNylHSnf5M_vInQHn8iLEUQt?usp=sharing",
-                      "no route"
+      new ProjectCard("Minio & Spark",
+                      "Integration between Minio and Spark using k8s, learn how to send jobs to spark operator",
+                      "no link",
+                      "minio-spark"
       )      
 
     ]
