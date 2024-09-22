@@ -39,14 +39,162 @@
                     As i mention previously, cloud shell has already installed kubernetes, the first command you need to run is                    
                 </p>
                 <app-code-box code="minikube start"></app-code-box>            
-                <p>Next, clone the github repository and in the root folder create an instance of minio, you need to use the three files in minio folder.</p>
+                <p>Next, clone the github repository and in the root folder create an instance of minio, you need to use the three files in minio folder. 
+                    But before it's necessary two little changes.</p>                
+
+                <p>First, in the minio-prod.yml file assign a correct value for path, it must be a existing folder in your machine. Now, save changes and run:</p>
+                <app-code-box code="  volumes:
+                - name: localvolume
+                  hostPath:
+                    path: <point_to_some_existing_path>
+                    type: DirectoryOrCreate"></app-code-box>   
+                <p>Second, in the minio-secret.yml file the MINIO_ROOT_USER and MINIO_ROOT_PASSWORD are in base64 and are 'minio_user' and 'minio_password', respectively.
+                    <app-code-box code="                    apiVersion: v1
+                    kind: Secret
+                    metadata:
+                      name: minio-secret
+                      namespace: minio-prod
+                    type: Opaque
+                    data:
+                      MINIO_ROOT_USER: bWluaW9fdXNlcg==
+                      MINIO_ROOT_PASSWORD: bWluaW9fcGFzc3dvcmQ="></app-code-box>                                        
+
+
+                </p> 
+                <p>
+                    You can change by your own credentials running in the terminal.
+                </p>
+                <app-code-box code="echo <username|password> | base64"></app-code-box>                    
+                <p>
+                    After these settings, just create the namespace 'minio-prod' and then create your minio instance.
+                </p>
+                <app-code-box code="kubectl create ns minio-prod #create the namespace for minio"></app-code-box>
                 <app-code-box code="kubectl apply -f minio"></app-code-box>
+                <p>
+                    If all it's going well, there is a pod called minio and a service called minio-service. The minio-service has two ports, 9000 and 9090.
+                    The 9000 port gives access to minio backend and the 9090 port gives access to the minio console. In my case, the host provided by cloud shell
+                    is https://9090-cs-102581714513-default.cs-us-east1-dogs.cloudshell.dev/. 
+                </p>
+                <p>
+                    For the integration with spark, you need a secret key and create a bucket. So, open the console and log in
+                </p>
+                <img src="./assets/images/minio-spark/minio-console-login.png"
+                    style="display: block; margin-left: auto; margin-right: auto; width: 85%;" alt="">
+                <p>
+                    Create your first bucket, the mine will be orders.
+                </p>
+                <img src="./assets/images/minio-spark/minio-console-bucket.png"
+                    style="display: block; margin-left: auto; margin-right: auto; width: 85%;" alt="">
+                <p>Now, in your bucket upload a .csv or .json or wharever file you want. But to do it easy, use the
+                    example file company_sales.json, i let it in the folder data.
+                </p>
+                <p>The last part of this section is create access and secret keys, i'll use it later to connect spark to the orders bucket
+                    and process the company_sales.json file.
+                </p>
+                <img src="./assets/images/minio-spark/minio-console-keys.png"
+                    style="display: block; margin-left: auto; margin-right: auto; width: 85%;" alt="">
+                <p>
+                    Copy and save the keys.
+                </p>
+                <img src="./assets/images/minio-spark/minio-console-keys2.png"
+                    style="display: block; margin-left: auto; margin-right: auto; width: 85%;" alt="">
+                <p>
+                    Next, is moment to create a spark operator instance and send a spark job that connects to
+                    minio process the data.
+                </p>
             </div>
             <div id="section3">
                 <h2>
                     Spark Setup
                 </h2>
-                fasdfsdafsdfdsa
+                <p>
+                    The first thing you need is create a spark operator instance using helm.                    
+                </p>
+                <app-code-box code="helm install spark-operator spark-operator/spark-operator --namespace minio-prod"></app-code-box>
+                <p>Now, is important have spark installed, you can make a fast installation following my <a routerLink="/practices/pyspark" routerLinkActive="active">pyspark tutorial</a> </p>
+                <p>Back to spark operator instance, the steps to follow are:</p>
+                <ol>
+                    <li>
+                        Create a spark docker image with the code below. I'll use spark-kubernetes for repo name and 1.0.0 for tag.
+                        <app-code-box code="./bin/docker-image-tool.sh -r spark-kubernetes -t 1.0.0 -p ./kubernetes/dockerfiles/spark/bindings/python/Dockerfile build"></app-code-box>
+                    </li>
+                    <li> Change the spark job script.
+                    <app-code-box code="from pyspark import SparkContext
+                    from pyspark.sql import SparkSession
+                    
+                    spark = SparkSession.builder \
+                        .appName('Spark S3 Example') \
+                        .config('spark.hadoop.fs.s3a.access.key', '&lt;minio access key&gt;') \
+                        .config('spark.hadoop.fs.s3a.secret.key', '&lt;minio secret key&gt;') \
+                        .config('spark.hadoop.fs.s3a.endpoint', '	&lt;minikube ip&gt;:&lt;minio-service port&gt;') \
+                        .config('spark.hadoop.fs.s3a.connection.ssl.enabled', 'false') \
+                        .config('spark.hadoop.fs.s3a.impl', 'org.apache.hadoop.fs.s3a.S3AFileSystem') \
+                        .getOrCreate()
+
+                    dataframe = spark.read.json('s3a://orders/company_sales.json')
+                    average = dataframe.agg({'sales': 'avg'})
+                    average.show()"></app-code-box>
+                    To get the minikube ip (the cluster host) and the service port just type.
+                    <app-code-box code="kubectl get svc -n minio-prod"></app-code-box>        
+                    Don't forget paste the access and secret keys that you created in the previous section.      
+                    </li>
+                    <li>
+                        Create a second image using the Dockerfile, it install the requirementes and copy the pyton scripts that will execute the spark job. The Dockerfile is in the folder spark_job_conf at the same level the python-scripts folder.
+                        <app-code-box code="FROM spark-kubernetes/spark-py:1.0.0
+
+                        USER root
+                        
+                        WORKDIR /app
+                        
+                        COPY ../python-scripts/requirements.txt .
+                        
+                        RUN pip install -r requirements.txt --break-system-packages
+                        
+                        COPY ../python-scripts/spark_job.py ."></app-code-box>                        
+                        If you want, save the spark-kubernetes/spark-py:1.0.0 in the docker hub, so you just have to pull it in the next step.
+                    </li>
+                    <li>
+                        Check the k8s.yaml file, it's in the spark_job_conf folder.
+                        <app-code-box code="apiVersion: sparkoperator.k8s.io/v1beta2
+                        kind: SparkApplication
+                        metadata:
+                          name: spark-pi
+                          namespace: minio-prod
+                        spec:
+                          type: Python
+                          pythonVersion: '3'
+                          mode: cluster
+                          image: lucianomdc/sparkjob:1.0 #Change the docker image by your own
+                          imagePullPolicy: Always
+                          mainClass: org.apache.spark.examples.SparkPi
+                          mainApplicationFile: local:///app/spark_job.py
+                          sparkVersion: 3.5.0
+                          driver:
+                            labels:
+                              version: 3.5.0
+                            cores: 1
+                            coreLimit: 1200m
+                            memory: 512m
+                            serviceAccount: spark-operator
+                          executor:
+                            labels:
+                              version: 3.5.0
+                            instances: 1
+                            cores: 1
+                            coreLimit: 1200m
+                            memory: 512m
+                          deps:
+                            jars:
+                              - https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.4.0/hadoop-aws-3.4.0.jar
+                              - https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.12.262/aws-java-sdk-bundle-1.12.262.jar"> </app-code-box>                        
+                    It's important clarify, the spark needs two jars to make the minio connection, so, are added in the k8s deps.
+                    </li>
+                    <li>
+                        Finally, i submit the spark job to the spark operator using the k8s.yaml.
+                        <app-code-box code="kubectl apply -f k8s.yaml"> </app-code-box>                        
+                        It'll create a new pod in the namespace minio-prod, so you can see how the task is done in the logs.
+                    </li>
+                </ol>
             </div>
         </div>
     </div>
