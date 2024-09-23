@@ -11,6 +11,7 @@ import { PysparkComponent } from './components/pyspark/pyspark.component';
 import { DataManipulationComponent } from './components/data-manipulation/data-manipulation.component';
 import { MysqlElasticLogstashComponent } from './components/mysql-elastic-logstash/mysql-elastic-logstash.component';
 import { MinioSparkComponent } from './components/minio-spark/minio-spark.component';
+import { MysqlChallengesComponent } from './components/mysql-challenges/mysql-challenges.component';
 const routes: Routes = [
   {path: '',component: GlobalPageComponent},
   {path: 'test',component: TestComponent},
@@ -22,7 +23,8 @@ const routes: Routes = [
   {path: 'practices/pyspark',component:PysparkComponent},
   {path: 'problems/data-manipulation-techniques',component:DataManipulationComponent},
   {path: 'mysql-elastic-logstash',component:MysqlElasticLogstashComponent},
-  {path: 'minio-spark',component:MinioSparkComponent}
+  {path: 'minio-spark',component:MinioSparkComponent},
+  {path: 'mysql-challenges',component:MysqlChallengesComponent}
 ];
 
 @NgModule({

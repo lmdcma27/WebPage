@@ -64,10 +64,10 @@ export class MainComponent {
                       "no link",
                       "practices/mysql"
       ),      
-      new ProjectCard("MySql: Challenge Problems",
-                      "Coming soon...!",
+      new ProjectCard("SQL: Challenge Problems",
+                      "Here i share you solutions of sql problems to help you to improve your sql skills",
                       "no link",
-                      "no route"
+                      "mysql-challenges"
       ),
       new ProjectCard("Minio & Spark",
                       "Integration between Minio and Spark using k8s, learn how to send jobs to spark operator",
