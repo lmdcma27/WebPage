@@ -24,6 +24,14 @@
     align-items: center; /* Center the content horizontally */
 }
 
+@media (max-width: 700px) {
+    .page {
+        width: 85%; /* 80% width for screen sizes less than 700px */
+    }
+}
+
+
+
 
 p {
     text-indent: 2em;
@@ -57,47 +65,69 @@ p {
 .studies-table .career {
     font-weight: bold; /* Make the text bold */
 }
-
-
-.part1{
+.part1 {
     width: 100%;
-    height: 7%;
-    flex-direction: row;    
-    justify-content: space-between;    
+    height: 10%; /* Adjusted height to match content */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     margin-top: 2vh;
+    align-items: center; /* Vertically center the content */
 }
 
-
-.abstract{
-    float: left;    
-    width: 68%;       
-    margin-left: 2%;    
+.abstract {
+    width: 68%; /* Adjusted width */
+    margin-left: 2%;
 }
 
-.introduction{
-    
-    width: 100%;             
-    font-size:  1.8vh;
+.frase {
+    padding-top: 5.5%;
+    font-size: 2.0vh;
 }
 
-
-.frase{    
-    padding-top: 5.5%;    
-    width: 50vh;    
-    margin-left: 50%;
-    font-size:  1.8vh;
+/* Styling for .foto (avatar) */
+.foto {
+    width: auto;
+    height: 110px; /* Fixed height for image */
+    margin-top: 4vh;
+    margin-right: 4vh;
 }
 
-.foto{
-    float: right;    
-    width: 30%;
+.foto img {
+    width: 110px;
+    height: 110px;
 }
 
-img{
-    max-width: 100%;
-    height: auto;
-    margin: auto;
-}   
+@media (max-width: 700px) {
+    .part1 {
+        flex-direction: row; /* Stack elements vertically on smaller screens */
+        height: auto; /* Adjust height to content */
+        margin-top: 1vh;
+    }
+
+    .abstract {
+        width: 100%; /* Take full width */
+        margin-left: 0; /* Remove margin */
+    }
+
+    .frase {
+        width: 60%; /* Ensure phrase takes full width on small screens */
+        font-size: 1.5vh;        
+        margin-left: 7vh; /* Reset left margin */
+        padding-top: 2%; /* Adjust padding for better alignment */
+    }
+    .foto {
+        width: 40%; /* Allow image to take full width */
+        display: flex;
+        justify-content: center; /* Center the image horizontally */
+        margin-top: 7vh; /* Space between image and text */
+    }
+
+    .foto img {
+        width: 80px; /* Resize image to fit better */
+        height: 80px; /* Maintain aspect ratio */
+    }
+}
 
 #Avatar{
     display: block;

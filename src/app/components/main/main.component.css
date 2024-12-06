@@ -31,23 +31,34 @@
     display: flex;
 }
 
-.projectBox,.practiceBox{
+.projectBox, .practiceBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     width: 90%;    
-    background-color: white;    
+    background-color: white;
     border-style: solid;
     border-color: black;
     border-bottom-right-radius: 35px;
     border-top-left-radius: 35px;
-    height: 25%;
     text-align: center;
     margin: 3%;
-    align-items: space-between;
+    height: 19vh;
+    padding: 10px;
+    box-sizing: border-box;  /* Ensure padding and border are included in the width */
 }
+.projectBox a, .practiceBox a, .projectBox p, .practiceBox p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-size: 1.8vh;
+}
+
 
 .projectBox a:hover,.practiceBox a:hover{
     background-color: white;
     color: orange;
-    font-size: 22px;
+    font-size: 25px;
 }
 
 .projectBox:hover,.practiceBox:hover{
@@ -76,18 +87,37 @@
     font-weight: bold;
 }
 
-/*--------------------------CV CONTENT------------------------*/
-/* .sidebar{
-    float: right;
-    flex: 1;  
-    height: 100%; 
-    background-color: #f2f2f2;
-    padding-left: 1%;
-    padding-right: 1%;
-    border-left-style: solid;
-    border-right-style: solid;
-    border-color: black;
-    flex-direction: column;
-    overflow: auto;
-    display: flex;
-} */
+
+@media (max-width: 768px) {
+    /* On smaller screens, stack the projects and practices vertically */
+    .projectContent {
+        flex-direction: column;
+    }
+
+    .projects, .practices {
+        width: 100%;
+        float: none; /* Remove float */
+    }
+
+    .projectBox, .practiceBox {
+        width: 100%;  /* Ensure boxes take up full width on smaller screens */
+        height: auto;  /* Let the boxes adjust their height based on content */
+        margin: 5%;  /* Adjust margins for better spacing */
+    }
+
+    .maintitle {
+        font-size: 4vh; /* Make the title responsive */
+    }
+
+    /* Adjust other text sizes */
+    .projectBox a, .practiceBox a,.projectBox p, .practiceBox p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .projectBox, .practiceBox {
+        margin: 5% 0;  /* Adjust margin further for tiny screens */
+        padding: 8px;  /* Less padding on small screens */
+    }
+}

@@ -1,34 +1,54 @@
+/* Default header styles */
 .header {
-    background-color: black;
-    text-align: left;
-    color: rgb(238, 232, 232);
-    position: auto;
-    width: 100%;
-    height: 8vh;
+  background-color: black;
+  text-align: left;
+  color: rgb(238, 232, 232);
+  position: relative;
+  width: 100%;
+  height: 8vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 2%;
 }
+
 .logo {
-    float: left;
-    margin-left: 0.3%;
-    margin-top: 0.3%;
-    height: 85%;
-    width: 15%;    
+  margin: 0.3%;
+  height: 85%;
+  width: 15%;
 }
+
 .navbar {
-  float: right;
-  overflow: hidden;
-  width: 70%; /* Adjust the width to your preference */
-  height: 100%;
-  font-size: 100%;
+  width: 70%;  /* Adjust the width of navbar */
+  display: flex;
+  justify-content: flex-end; /* Align navbar items to the right */
+  align-items: center;
+}
+
+.navegation {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  justify-content: flex-end; /* Align navbar items to the right */
+}
+
+li {
+  font-size: 2vh;
+  margin: 0 2%;  /* Add spacing between items */
 }
 
 .navbar a {
-  float: left;
   color: white;
   text-align: center;
   text-decoration: none;
+  display: block;
   height: 100%;
+  padding: 0.5vh 1.5vh;
 }
 
+/* Navbar hover effects */
 .navbar a:hover {
   background-color: white;
   border-style: solid;
@@ -38,6 +58,7 @@
   font-size: 150%;
 }
 
+/* GitHub specific hover effect */
 .github a:hover {
   background-color: rgb(12, 12, 12);
   border-style: solid;
@@ -47,18 +68,60 @@
   font-size: 150%;
 }
 
-.navegation {
-  float: right;
-  list-style: none;
-  margin: 1%;
-  display: flex;
-  /* set the display property of the ul element to flex */
-  width: 30%; /* Adjust the width to your preference */
-  justify-content: flex-end; /* Align the list items to the right */
+/* Media Queries for Responsive Design */
+
+/* For screens smaller than 768px */
+@media (max-width: 768px) {
+  .header {
+      flex-direction: column; /* Stack the elements vertically */
+      height: auto;  /* Adjust height to fit the content */
+      justify-content: center; /* Center the items vertically */
+  }
+
+  .logo {
+      padding-right: 13vh;      
+      width: 10vh;
+      height:10vh;
+  }
+
+  .navbar {
+      width: 100%;  /* Make navbar full width */
+      justify-content: center; /* Center the navbar items */
+  }
+
+  .navegation {
+      justify-content: center; /* Center the navbar links */
+  }
+
+  li {
+      font-size: 3vh;  /* Increase font size for readability */
+      margin: 1vh;  /* Add spacing between items */
+  }
+
+  .navbar a {
+      padding: 0.5vh 2vh; /* Adjust padding for better clickability */
+  }
 }
 
-li {
-  margin: 2.3%;
-  font-size: 2vh;
-  /* add some spacing between list items */
+/* For screens smaller than 480px (very small screens like mobile phones) */
+@media (max-width: 480px) {
+  .logo {    
+    width: 10vh;
+    height:10vh;
+}
+  
+
+  .navbar {
+      width: 100%;  /* Make navbar full width */
+      justify-content: center; /* Center the navbar items */
+  }
+
+  li {
+      font-size: 4vh;  /* Increase font size more for small screens */
+      margin: 1vh 0;  /* Vertical spacing between items */
+  }
+
+  .navbar a {
+      padding: 1vh 2vh;  /* Increase padding for better clickability */
+  }
 }
