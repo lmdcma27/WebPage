@@ -18,7 +18,7 @@ export class MainComponent {
     this.elasticsearch_cards=[
       new ProjectCard("Docker & ElasticSearch",
                       "Create ElasticSearch instance to storage and save your datasets using indices",
-                      "https://youtu.be/7oQreXMsWzo?si=5R0_7gUIrqfSoDus",
+                      "no link",
                       "/projects/elastic-docker"
       ),
       new ProjectCard("ElasticSerch & MySql Connection",
