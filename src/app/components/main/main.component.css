@@ -46,6 +46,7 @@
     height: 19vh;
     padding: 10px;
     box-sizing: border-box;  /* Ensure padding and border are included in the width */
+    overflow: auto; 
 }
 .projectBox a, .practiceBox a, .projectBox p, .practiceBox p {
     word-wrap: break-word;
@@ -88,7 +89,8 @@
 }
 
 
-@media (max-width: 768px) {
+
+@media (max-width: 1080px) {
     /* On smaller screens, stack the projects and practices vertically */
     .projectContent {
         flex-direction: column;
@@ -111,13 +113,6 @@
 
     /* Adjust other text sizes */
     .projectBox a, .practiceBox a,.projectBox p, .practiceBox p {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 480px) {
-    .projectBox, .practiceBox {
-        margin: 5% 0;  /* Adjust margin further for tiny screens */
-        padding: 8px;  /* Less padding on small screens */
+        font-size: 2.5vw;
     }
 }
