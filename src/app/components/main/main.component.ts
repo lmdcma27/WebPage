@@ -15,24 +15,7 @@ export class MainComponent {
   public pyspark_pandas_cards: ProjectCard[];
 
   constructor(private _router: Router) {
-    this.elasticsearch_cards=[
-      new ProjectCard("Docker & ElasticSearch",
-                      "Create ElasticSearch instance to storage and save your datasets using indices",
-                      "no link",
-                      "/projects/elastic-docker"
-      ),
-      new ProjectCard("ElasticSerch & MySql Connection",
-      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.",
-      "no link",
-      "/mysql-elastic-logstash"
-      ),
-      new ProjectCard("Reindex indices in ElasticSearch",
-      "When or how reindex an index to optimize resources. Learn it here! \ Coming soon...!",
-      "no link",
-      "/test"
-      )
-    ]
-
+    
     this.pyspark_pandas_cards=[
       new ProjectCard("Setup PySpark environment",
                       "Take advantage of Google Cloud Shell and start to learn: in this little \
@@ -50,12 +33,30 @@ export class MainComponent {
                       "Learn how to calculate the Price Consumer Index using python, sql and advance pandas techniques",
                       "no link",
                       "projects/cpi"
+      )      
+    ]
+    this.elasticsearch_cards=[
+      new ProjectCard("Docker & ElasticSearch",
+                      "Create ElasticSearch instance to storage and save your datasets using indices",
+                      "no link",
+                      "/projects/elastic-docker"
+      ),
+      new ProjectCard("ElasticSerch & MySql Connection",
+      "Connect MySql to ElasticSearch and display your queries in indices with Logstash.",
+      "no link",
+      "/mysql-elastic-logstash"
+      ),
+      new ProjectCard("Reindex indices in ElasticSearch",
+      "When or how reindex an index to optimize resources. Learn it here! \ Coming soon...!",
+      "no link",
+      "/test"
       ),
       new ProjectCard("Miscellaneous Problems",
-                      "Here i share solutions to math  problems about graphs or optimization.\ Coming soon...!",
-                      "No link",
-                      "no route")
+        "Here i share solutions to math  problems about graphs or optimization.\ Coming soon...!",
+        "no link",
+        "no route")
     ]
+
 
     this.mysql_cards=[
       new ProjectCard("Setup MySql environment",

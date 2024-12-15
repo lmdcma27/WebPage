@@ -7,15 +7,7 @@
         
 
         <div class="projectContent">
-            <div class="projects">        
-                <div class="projectBox" *ngFor="let project of elasticsearch_cards">
-
-                    <a [routerLink]="project.route" routerLinkActive="active">{{project.title}}</a>
-                    <p>{{project.description}}</p>    
-                    <br>
-                    <a *ngIf="project.link!= 'no link'" [href]="project.link" target="_blank" class="ytvideo">Watch YT video</a>
-                </div>                                
-            </div>
+            
             <div class="practices">    
                 <div class="practiceBox" *ngFor="let practice of pyspark_pandas_cards">
                     <a *ngIf="practice.link!= 'no link'; else practiceRoute" [href]="practice.link" target="_blank"> {{practice.title}} </a>
@@ -25,6 +17,15 @@
                         <a [routerLink]="practice.route">{{practice.title}}</a>
                     </ng-template>
                 </div>
+            </div>
+            <div class="projects">        
+                <div class="projectBox" *ngFor="let project of elasticsearch_cards">
+
+                    <a [routerLink]="project.route" routerLinkActive="active">{{project.title}}</a>
+                    <p>{{project.description}}</p>    
+                    <br>
+                    <a *ngIf="project.link!= 'no link'" [href]="project.link" target="_blank" class="ytvideo">Watch YT video</a>
+                </div>                                
             </div>
             <div class="practices">
                 <div class="practiceBox" *ngFor="let practice of mysql_cards">
